@@ -232,151 +232,6 @@ subquestion: |
   These are called the “Covenants of Habitability.” They are set by law and can’t be changed or ignored, even if the lease says something different. The landlord is responsible for repairs to the home unless the tenant damages the home on purpose or by being reckless or careless.
   
   Complete this form to request that your landlord make the necessary repairs within 14 days.
----
-code: |
-  repairs_checklist.infestations.mice.problem = "Mice"
----
-code: |
-  repairs_checklist.infestations.cockroaches.problem = "Cockroaches"
----
-code: |
-  repairs_checklist.infestations.bedbugs.problem = "Bedbugs"
----
-code: |
-  repairs_checklist.infestations.other.problem = "Other"
----
-code: |
-  repairs_checklist.electrical.smoke_detector.problem = "No/broken smoke detector"
----
-code: |
-  repairs_checklist.electrical.wiring.problem = "Exposed wiring"
----
-code: |
-  repairs_checklist.electrical.circuits.problem = "Short circuits/faulty electrical"
----
-code: |
-  repairs_checklist.electrical.outlet_covers.problem = "No cover plates on outlets"
----
-code: |
-  repairs_checklist.electrical.other.problem = "Other"
----
-code: |
-  repairs_checklist.plumbing.hot_water.problem = "No hot water"
----
-code: |
-  repairs_checklist.plumbing.clogged_pipes.problem = "Clogged pipes/toilet"
----
-code: |
-  repairs_checklist.plumbing.water_pressure.problem = "Bad water pressure"
----
-code: |
-  repairs_checklist.plumbing.dripping_faucets.problem = "Dripping faucets"
----
-code: |
-  repairs_checklist.plumbing.leaks.problem = "Leaks"
----
-code: |
-  repairs_checklist.plumbing.other.problem = "Other"
----
-code: |
-  repairs_checklist.windows.screens.problem = "Missing/torn screens"
----
-code: |
-  repairs_checklist.windows.storm_windows.problem = "Missing storm windows"
----
-code: |
-  repairs_checklist.windows.broken_glass.problem = "Broken/cracked glass"
----
-code: |
-  repairs_checklist.windows.locks.problem = "Missing/broken locks"
----
-code: |
-  repairs_checklist.windows.other.problem = "Other"
----
-code: |
-  repairs_checklist.doors.deadbolt_locks.problem = "No deadbolt locks"
----
-code: |
-  repairs_checklist.doors.broken_locks.problem = "Broken locks"
----
-code: |
-  repairs_checklist.doors.door_knobs.problem = "Missing/broken door knobs"
----
-code: |
-  repairs_checklist.doors.other.problem = "Other"
----
-code: |
-  repairs_checklist.walls_ceiling_floors.paint.problem = "Chipped/flaking paint"
----
-code: |
-  repairs_checklist.walls_ceiling_floors.holes.problem = "Holes or cracks in walls"
----
-code: |
-  repairs_checklist.walls_ceiling_floors.leaky_roof_ceiling.problem = "Leaky Roof or ceiling"
----
-code: |
-  repairs_checklist.walls_ceiling_floors.carpet.problem = "Holes in carpet"
----
-code: |
-  repairs_checklist.walls_ceiling_floors.tiles_linoleum.problem = "Missing/broken tiles or linoleum"
----
-code: |
-  repairs_checklist.walls_ceiling_floors.other.problem = "Other"
----
-code: |
-  repairs_checklist.furnace.heat.problem = "Not enough heat"
----
-code: |
-  repairs_checklist.furnace.gas_leaks.problem = "Gas leaks"
----
-code: |
-  repairs_checklist.furnace.other.problem = "Other"
----
-code: |
-  repairs_checklist.appliances.stove.problem = "Broken stove/oven"
----
-code: |
-  repairs_checklist.appliances.refrigerator.problem = "Broken refrigerator"
----
-code: |
-  repairs_checklist.appliances.other.problem = "Other"
----
-code: |
-  repairs_checklist.security.illegal_entries.problem = "Illegal entries by landlord"
----
-code: |
-  repairs_checklist.security.disturbance.problem = "Disturbance by other tenants"
----
-code: |
-  repairs_checklist.security.break_ins.problem = "Break-ins, vandalism"
----
-code: |
-  repairs_checklist.security.unsecure_doors.problem = "Broken or unsecure entry doors"
----
-code: |
-  repairs_checklist.security.other.problem = "Other"
----
-code: |
-  repairs_checklist.other_areas.yard.problem = "Issues with the yard"
----
-code: |
-  repairs_checklist.other_areas.trash.problem = "Trash from previous tenant"
----
-code: |
-  repairs_checklist.other_areas.garage.problem = "Problems with garage/storage area"
----
-code: |
-  repairs_checklist.other_areas.basement.problem = "Leaky basement"
----
-code: |
-  repairs_checklist.other_areas.utility_bills.problem = "Pay utility bills"
----
-code: |
-  repairs_checklist.other_areas.cabinets.problem = "Missing/broken cabinets/doors"
-#---
-#code: |
-#  repairs_checklist.other_areas.other.problem = "Other"
----
 #code: |
 #  repairs_checklist[i].infestations_problem_mice
 #  repairs_checklist[i].infestations_started_mice
@@ -1270,63 +1125,70 @@ subquestion: |
   | **:check:** | **Problem** | **Start Date** | **Description** |
   |---|:-:|--:|
   | | **Infestations** | | |
-  | | Mice | ${ repairs_checklist.infestations.mice.started } | ${ repairs_checklist.infestations.mice.description } |
-  | | Cockroaches | ${ repairs_checklist.infestations.cockroaches.started } | ${ repairs_checklist.infestations.cockroaches.description } |
-  | | Bedbugs | ${ repairs_checklist.infestations.bedbugs.started } | ${ repairs_checklist.infestations.bedbugs.description } |
-  | | Other | ${ repairs_checklist.infestations.other.started } | ${ repairs_checklist.infestations.other.description } |
+  | ${ ":check:" if repairs_checklist.infestations.mice.problem == True else "" } | Mice | ${ repairs_checklist.infestations.mice.started } | ${ repairs_checklist.infestations.mice.description } |
+  | ${ ":check:" if repairs_checklist.infestations.cockroaches.problem == True else "" } | Cockroaches | ${ repairs_checklist.infestations.cockroaches.started } | ${ repairs_checklist.infestations.cockroaches.description } |
+  | ${ ":check:" if repairs_checklist.infestations.bedbugs.problem == True else "" } | Bedbugs | ${ repairs_checklist.infestations.bedbugs.started } | ${ repairs_checklist.infestations.bedbugs.description } |
+  | ${ ":check:" if repairs_checklist.infestations.other.problem == True else "" } | Other | ${ repairs_checklist.infestations.other.started } | ${ repairs_checklist.infestations.other.description } |
   | | **Electrical** | | |
-  | | No/broken smoke detector | ${ repairs_checklist.electrical.smoke_detector.started } | ${ repairs_checklist.electrical.smoke_detector.description } |
-  | | Exposed wiring | ${ repairs_checklist.electrical.wiring.started } | ${ repairs_checklist.electrical.wiring.description } |
-  | | Short circuits/faulty electrical | ${ repairs_checklist.electrical.circuits.started } | ${ repairs_checklist.electrical.circuits.description } |
-  | | No cover plates on outlets | ${ repairs_checklist.electrical.outlet_covers.started } | ${ repairs_checklist.electrical.wiring.description } |
-  | | Other | ${ repairs_checklist.electrical.other.started } | ${ repairs_checklist.electrical.wiring.description } |
+  | ${ ":check:" if repairs_checklist.electrical.smoke_detector.problem == True else "" } | No/broken smoke detector | ${ repairs_checklist.electrical.smoke_detector.started } | ${ repairs_checklist.electrical.smoke_detector.description } |
+  | ${ ":check:" if repairs_checklist.electrical.wiring.problem == True else "" } | Exposed wiring | ${ repairs_checklist.electrical.wiring.started } | ${ repairs_checklist.electrical.wiring.description } |
+  | ${ ":check:" if repairs_checklist.electrical.circuits.problem == True else "" } | Short circuits/faulty electrical | ${ repairs_checklist.electrical.circuits.started } | ${ repairs_checklist.electrical.circuits.description } |
+  | ${ ":check:" if repairs_checklist.electrical.outlet_covers.problem == True else "" } | No cover plates on outlets | ${ repairs_checklist.electrical.outlet_covers.started } | ${ repairs_checklist.electrical.wiring.description } |
+  | ${ ":check:" if repairs_checklist.electrical.other.problem == True else "" } | Other | ${ repairs_checklist.electrical.other.started } | ${ repairs_checklist.electrical.wiring.description } |
   | | **Plumbing** | | |
-  | | No hot water | ${ repairs_checklist.plumbing.hot_water.started } | ${ repairs_checklist.plumbing.hot_water.description } |
-  | | Clogged pipes/toilets | ${ repairs_checklist.plumbing.clogged_pipes.started } | ${ repairs_checklist.plumbing.clogged_pipes.description } |
-  | | Bad water pressure | ${ repairs_checklist.plumbing.water_pressure.started } | ${ repairs_checklist.plumbing.water_pressure.description } |
-  | | Dripping faucets | ${ repairs_checklist.plumbing.dripping_faucets.started } | ${ repairs_checklist.plumbing.dripping_faucets.description } |
-  | | Leaks | ${ repairs_checklist.plumbing.leaks.started } | ${ repairs_checklist.plumbing.leaks.description } |
-  | | Other | ${ repairs_checklist.plumbing.other.started } | ${ repairs_checklist.plumbing.other.description } |
+  | ${ ":check:" if repairs_checklist.plumbing.hot_water.problem == True else "" } | No hot water | ${ repairs_checklist.plumbing.hot_water.started } | ${ repairs_checklist.plumbing.hot_water.description } |
+  | ${ ":check:" if repairs_checklist.plumbing.clogged_pipes.problem == True else "" } | Clogged pipes/toilets | ${ repairs_checklist.plumbing.clogged_pipes.started } | ${ repairs_checklist.plumbing.clogged_pipes.description } |
+  | ${ ":check:" if repairs_checklist.plumbing.water_pressure.problem == True else "" } | Bad water pressure | ${ repairs_checklist.plumbing.water_pressure.started } | ${ repairs_checklist.plumbing.water_pressure.description } |
+  | ${ ":check:" if repairs_checklist.plumbing.dripping_faucets.problem == True else "" } | Dripping faucets | ${ repairs_checklist.plumbing.dripping_faucets.started } | ${ repairs_checklist.plumbing.dripping_faucets.description } |
+  | ${ ":check:" if repairs_checklist.plumbing.leaks.problem == True else "" } | Leaks | ${ repairs_checklist.plumbing.leaks.started } | ${ repairs_checklist.plumbing.leaks.description } |
+  | ${ ":check:" if repairs_checklist.plumbing.other.problem == True else "" } | Other | ${ repairs_checklist.plumbing.other.started } | ${ repairs_checklist.plumbing.other.description } |
   | | **Windows** |  |  |
-  | | Missing/torn screens | ${ repairs_checklist.windows.screens.started } | ${ repairs_checklist.windows.screens.description } |
-  | | Missing storm windows | ${ repairs_checklist.windows.storm_windows.started } | ${ repairs_checklist.windows.storm_windows.description } |
-  | | Broken/cracked glass  | ${ repairs_checklist.windows.broken_glass.started } | ${ repairs_checklist.windows.broken_glass.description } |
-  | | Missing/broken locks | ${ repairs_checklist.windows.locks.started } | ${ repairs_checklist.windows.locks.description } |
-  | | Other | ${ repairs_checklist.windows.other.started } | ${ repairs_checklist.windows.other.description } |
+  | ${ ":check:" if repairs_checklist.windows.screens.problem == True else "" } | Missing/torn screens | ${ repairs_checklist.windows.screens.started } | ${ repairs_checklist.windows.screens.description } |
+  | ${ ":check:" if repairs_checklist.windows.storm_windows.problem == True else "" } | Missing storm windows | ${ repairs_checklist.windows.storm_windows.started } | ${ repairs_checklist.windows.storm_windows.description } |
+  | ${ ":check:" if repairs_checklist.windows.broken_glass.problem == True else "" } | Broken/cracked glass  | ${ repairs_checklist.windows.broken_glass.started } | ${ repairs_checklist.windows.broken_glass.description } |
+  | ${ ":check:" if repairs_checklist.windows.locks.problem == True else "" } | Missing/broken locks | ${ repairs_checklist.windows.locks.started } | ${ repairs_checklist.windows.locks.description } |
+  | ${ ":check:" if repairs_checklist.windows.other.problem == True else "" } | Other | ${ repairs_checklist.windows.other.started } | ${ repairs_checklist.windows.other.description } |
   | | **Doors** |  |  |
-  | | No deadbolt locks | ${ repairs_checklist.doors.deadbolt_locks.started } | ${ repairs_checklist.doors.deadbolt_locks.description } |
-  | | Broken locks | ${ repairs_checklist.doors.broken_locks.started } | ${ repairs_checklist.doors.broken_locks.description } |
-  | | Missing/broken door knobs | ${ repairs_checklist.doors.door_knobs.started } | ${ repairs_checklist.doors.door_knobs.description } |
-  | | Other | ${ repairs_checklist.doors.other.started } | ${ repairs_checklist.doors.other.description } |
+  | ${ ":check:" if repairs_checklist.doors.deadbolt_locks.problem == True else "" } | No deadbolt locks | ${ repairs_checklist.doors.deadbolt_locks.started } | ${ repairs_checklist.doors.deadbolt_locks.description } |
+  | ${ ":check:" if repairs_checklist.doors.broken_locks.problem == True else "" } | Broken locks | ${ repairs_checklist.doors.broken_locks.started } | ${ repairs_checklist.doors.broken_locks.description } |
+  | ${ ":check:" if repairs_checklist.doors.door_knobs.problem == True else "" } | Missing/broken door knobs | ${ repairs_checklist.doors.door_knobs.started } | ${ repairs_checklist.doors.door_knobs.description } |
+  | ${ ":check:" if repairs_checklist.doors.other.problem == True else "" } | Other | ${ repairs_checklist.doors.other.started } | ${ repairs_checklist.doors.other.description } |
   | | **Walls / Ceiling / Floors** |  |  |
-  | | Chipped/flaking paint | ${ repairs_checklist.walls_ceiling_floors.paint.started } | ${ repairs_checklist.walls_ceiling_floors.paint.description } |
-  | | Holes or cracks in walls | ${ repairs_checklist.walls_ceiling_floors.holes.started } | ${ repairs_checklist.walls_ceiling_floors.holes.description } |
-  | | Leaky roof or ceiling | ${ repairs_checklist.walls_ceiling_floors.leaky_roof_ceiling.started } | ${ repairs_checklist.walls_ceiling_floors.leaky_roof_ceiling.description } |
-  | | Holes in carpet | ${ repairs_checklist.walls_ceiling_floors.carpet.started } | ${ repairs_checklist.walls_ceiling_floors.carpet.description } |
-  | | Missing/broken tiles or linoleum | ${ repairs_checklist.walls_ceiling_floors.tiles_linoleum.started } | ${ repairs_checklist.walls_ceiling_floors.tiles_linoleum.description } |
-  | | Other | ${ repairs_checklist.walls_ceiling_floors.other.started } | ${ repairs_checklist.walls_ceiling_floors.other.description } |
+  | ${ ":check:" if repairs_checklist.walls_ceiling_floors.paint.problem == True else "" } | Chipped/flaking paint | ${ repairs_checklist.walls_ceiling_floors.paint.started } | ${ repairs_checklist.walls_ceiling_floors.paint.description } |
+  | ${ ":check:" if repairs_checklist.walls_ceiling_floors.holes.problem == True else "" } | Holes or cracks in walls | ${ repairs_checklist.walls_ceiling_floors.holes.started } | ${ repairs_checklist.walls_ceiling_floors.holes.description } |
+  | ${ ":check:" if repairs_checklist.walls_ceiling_floors.leaky_roof_ceiling.problem == True else "" } | Leaky roof or ceiling | ${ repairs_checklist.walls_ceiling_floors.leaky_roof_ceiling.started } | ${ repairs_checklist.walls_ceiling_floors.leaky_roof_ceiling.description } |
+  | ${ ":check:" if repairs_checklist.walls_ceiling_floors.carpet.problem == True else "" } | Holes in carpet | ${ repairs_checklist.walls_ceiling_floors.carpet.started } | ${ repairs_checklist.walls_ceiling_floors.carpet.description } |
+  | ${ ":check:" if repairs_checklist.walls_ceiling_floors.tiles_linoleum.problem == True else "" } | Missing/broken tiles or linoleum | ${ repairs_checklist.walls_ceiling_floors.tiles_linoleum.started } | ${ repairs_checklist.walls_ceiling_floors.tiles_linoleum.description } |
+  | ${ ":check:" if repairs_checklist.walls_ceiling_floors.other.problem == True else "" } | Other | ${ repairs_checklist.walls_ceiling_floors.other.started } | ${ repairs_checklist.walls_ceiling_floors.other.description } |
   | | **Furnace** |  |  |
-  | | Not enough heat | ${ repairs_checklist.furnace.heat.started } | ${ repairs_checklist.furnace.heat.description } |
-  | | Gas leaks | ${ repairs_checklist.furnace.gas_leaks.started } | ${ repairs_checklist.furnace.gas_leaks.description } |
-  | | Other | ${ repairs_checklist.furnace.other.started } | ${ repairs_checklist.furnace.other.description } |
+  | ${ ":check:" if repairs_checklist.furnace.heat.problem == True else "" } | Not enough heat | ${ repairs_checklist.furnace.heat.started } | ${ repairs_checklist.furnace.heat.description } |
+  | ${ ":check:" if repairs_checklist.furnace.gas_leaks.problem == True else "" } | Gas leaks | ${ repairs_checklist.furnace.gas_leaks.started } | ${ repairs_checklist.furnace.gas_leaks.description } |
+  | ${ ":check:" if repairs_checklist.furnace.other.problem == True else "" } | Other | ${ repairs_checklist.furnace.other.started } | ${ repairs_checklist.furnace.other.description } |
   | | **Appliances** |  |  |
-  | | Broken stove/oven | ${ repairs_checklist.appliances.stove.started } | ${ repairs_checklist.appliances.stove.description } |
-  | | Broken refrigerator  | ${ repairs_checklist.appliances.refrigerator.started } | ${ repairs_checklist.appliances.refrigerator.description } |
-  | | Other | ${ repairs_checklist.appliances.other.started } | ${ repairs_checklist.appliances.other.description } |
+  | ${ ":check:" if repairs_checklist.appliances.stove.problem == True else "" } | Broken stove/oven | ${ repairs_checklist.appliances.stove.started } | ${ repairs_checklist.appliances.stove.description } |
+  | ${ ":check:" if repairs_checklist.appliances.refrigerator.problem == True else "" } | Broken refrigerator  | ${ repairs_checklist.appliances.refrigerator.started } | ${ repairs_checklist.appliances.refrigerator.description } |
+  | ${ ":check:" if repairs_checklist.appliances.other.problem == True else "" } | Other | ${ repairs_checklist.appliances.other.started } | ${ repairs_checklist.appliances.other.description } |
   | | **Security / Privacy** |  |  |
-  | | Illegal entries by landlord | ${ repairs_checklist.security.illegal_entries.started } | ${ repairs_checklist.security.illegal_entries.description } |
-  | | Disturbance by other tenants | ${ repairs_checklist.security.disturbance.started } | ${ repairs_checklist.security.disturbance.description } |
-  | | Break-ins, vandalism | ${ repairs_checklist.security.break_ins.started } | ${ repairs_checklist.security.break_ins.description } |
-  | | Broken or unsecure entry doors | ${ repairs_checklist.security.unsecure_doors.started } | ${ repairs_checklist.security.unsecure_doors.description } |
-  | | Other | ${ repairs_checklist.security.other.started } | ${ repairs_checklist.security.other.description } |
+  | ${ ":check:" if repairs_checklist.security.illegal_entries.problem == True else "" } | Illegal entries by landlord | ${ repairs_checklist.security.illegal_entries.started } | ${ repairs_checklist.security.illegal_entries.description } |
+  | ${ ":check:" if repairs_checklist.security.disturbance.problem == True else "" } | Disturbance by other tenants | ${ repairs_checklist.security.disturbance.started } | ${ repairs_checklist.security.disturbance.description } |
+  | ${ ":check:" if repairs_checklist.security.break_ins.problem == True else "" } | Break-ins, vandalism | ${ repairs_checklist.security.break_ins.started } | ${ repairs_checklist.security.break_ins.description } |
+  | ${ ":check:" if repairs_checklist.security.unsecure_doors.problem == True else "" } | Broken or unsecure entry doors | ${ repairs_checklist.security.unsecure_doors.started } | ${ repairs_checklist.security.unsecure_doors.description } |
+  | ${ ":check:" if repairs_checklist.security.other.problem == True else "" } | Other | ${ repairs_checklist.security.other.started } | ${ repairs_checklist.security.other.description } |
   | | **Other Areas** |  |  |
-  | | Issues with the yard | ${ repairs_checklist.other_areas.yard.started } | ${ repairs_checklist.other_areas.yard.description } |
-  | | Trash from previous tenant | ${ repairs_checklist.other_areas.trash.started } | ${ repairs_checklist.other_areas.trash.description } |
-  | | Problems with garage/storage area | ${ repairs_checklist.other_areas.garage.started } | ${ repairs_checklist.other_areas.garage.description } |
-  | | Leaky basement | ${ repairs_checklist.other_areas.basement.started } | ${ repairs_checklist.other_areas.basement.description } |
-  | | Pay utility bills | ${ repairs_checklist.other_areas.utility_bills.started } | ${ repairs_checklist.other_areas.utility_bills.description } |
-  | | Missing/broken cabinets/doors | ${ repairs_checklist.other_areas.cabinets.started } | ${ repairs_checklist.other_areas.cabinets.description } |
+  | ${ ":check:" if repairs_checklist.other_areas.yard.problem == True else "" } | Issues with the yard | ${ repairs_checklist.other_areas.yard.started } | ${ repairs_checklist.other_areas.yard.description } |
+  | ${ ":check:" if repairs_checklist.other_areas.trash.problem == True else "" } | Trash from previous tenant | ${ repairs_checklist.other_areas.trash.started } | ${ repairs_checklist.other_areas.trash.description } |
+  | ${ ":check:" if repairs_checklist.other_areas.garage.problem == True else "" } | Problems with garage/storage area | ${ repairs_checklist.other_areas.garage.started } | ${ repairs_checklist.other_areas.garage.description } |
+  | ${ ":check:" if repairs_checklist.other_areas.basement.problem == True else "" } | Leaky basement | ${ repairs_checklist.other_areas.basement.started } | ${ repairs_checklist.other_areas.basement.description } |
+  | ${ ":check:" if repairs_checklist.other_areas.utility_bills.problem == True else "" } | Pay utility bills | ${ repairs_checklist.other_areas.utility_bills.started } | ${ repairs_checklist.other_areas.utility_bills.description } |
+  | ${ ":check:" if repairs_checklist.other_areas.cabinets.problem == True else "" } | Missing/broken cabinets/doors | ${ repairs_checklist.other_areas.cabinets.started } | ${ repairs_checklist.other_areas.cabinets.description } |
+  % if repairs_checklist.other_areas.other.there_are_any:
+  % for item in repairs_checklist.other_areas.other:
+  | ${ ":check:" if repairs_checklist.other_areas.other.there_are_any == True else "" } | ${ item.problem } | ${ item.started } | ${ item.description } |
+  % endfor
+  % endif
 #  | | Other | ${ repairs_checklist.other_areas.other[i].started } | ${ repairs_checklist.other_areas.other[i].description } |
+#  | | **Other** |  |  |
+#  | | ${ repairs_checklist.other_areas.other[i].problem } | ${ repairs_checklist.other_areas.other[i].started } | ${ repairs_checklist.other_areas.other[i].description } |
   
 #  | :check: | Problem | Start date | Description |
 #  | - | - | - | - |
@@ -1370,7 +1232,6 @@ subquestion: |
 #  Edit your reponses
 #subquestion: |
 #  ${ repairs_checklist.table }
-
 ---
 sets:
   - other_parties[i].name.first

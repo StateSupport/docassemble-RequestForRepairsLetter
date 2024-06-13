@@ -32,7 +32,9 @@ code: |
   interview_short_title = "Write a Request for repairs letter"
 ---
 code: |
-  al_form_type = "letter" 
+  if al_form_type in ['letter', 'starts_case']:
+    user_started_case = True 
+  #al_form_type = "letter" 
 ---
 objects:
   - repairs_checklist: DAObject.using(gathered=True)
@@ -94,6 +96,22 @@ objects:
   - repairs_checklist.other_areas.utility_bills: DAObject
   - repairs_checklist.other_areas.cabinets: DAObject
   - repairs_checklist.other_areas.other: DAList.using(object_type=DAObject,complete_attribute="problem")
+  - other_parties: ALPeopleList.using(there_are_any=True) # (ask_number=True,target_number=1)
+---
+generic object: ALIndividual
+template: x.person_type_label
+content: |
+  Is this a person or a company?
+---
+generic object: ALIndividual
+template: x.business_choice_label
+content: |
+  Company
+---
+generic object: ALIndividual
+template: x.business_name_label
+content: |
+  Name of company
 ---
 sections:
   - review_Request_for_repairs_letter: Review your answers
@@ -922,6 +940,24 @@ subquestion: |
   % endfor
   % endif
 ---
+code: |
+  # If the form is a letter, it _always_ is addressed to someone.
+  if al_form_type == 'letter':
+    other_parties.there_are_any = True
+---
+#id: name of ALIndividual
+#sets:
+#  - x.name.first
+#  - x.name.last
+#  - x.name.middle
+#  - x.name.suffix
+#generic object: ALIndividual
+#question: |
+#  What is ${x.object_possessive('name')}?
+#fields:
+#  - code: |
+#      x.name_fields()
+#---
 sets:
   - other_parties[i].name.first
   - other_parties[i].name.last
@@ -929,15 +965,32 @@ sets:
   - other_parties[i].name.suffix
 id: names of opposing parties
 question: |
+  Who will you send this letter to?
+subquestion: |
+  List the names of your landlord, property manager, and/or management company that you will send this letter to. List all that apply.
+  
   % if user_started_case:
-  Name of ${ ordinal(i) } **defendant** or respondent in this
-  matter
+  Name the ${ ordinal(i) } below. You will then be asked to add any others.
   % else:
   Name of ${ ordinal(i) } **plaintiff** or petitioner in this matter
   % endif
 fields:
   - code: |
       other_parties[i].name_fields(person_or_business='unsure')
+#fields: |
+#  - no label: other_parties.there_are_any
+#    datatype: yesnoradio
+---
+id: any other opposing parties
+question: |
+  % if user_started_case:
+  Are there any others?
+  % else:
+  Is there any other **plaintiff** or petitioner in this matter?
+  % endif
+fields:
+  - no label: other_parties.there_is_another
+    datatype: yesnoradio
 ---
 id: preview Request_for_repairs_letter
 question: |
@@ -1613,7 +1666,6 @@ edit:
   - name.first
   - address.address
 confirm: True
-
 ---
 continue button field: users.revisit
 question: |

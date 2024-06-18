@@ -1879,11 +1879,11 @@ attachment:
       - "other_areas_cabinets": ${ repairs_checklist.other_areas.cabinets.problem }
       - "other_areas_started_cabinets": ${ repairs_checklist.other_areas.cabinets.started }
       - "other_areas_description_cabinets": ${ repairs_checklist.other_areas.cabinets.description }
-      - "other_areas1_other_1": ${ defined("repairs_checklist.other_areas.other[0]") } # ${ True } 
+      - "other_areas1_other_1": ${ defined('repairs_checklist.other_areas.other[0]') } # ${ True } 
       - "other_problem_1": ${ repairs_checklist.other_areas.other[0].problem }
       - "other_areas_started_other_1": ${ repairs_checklist.other_areas.other[0].started }
       - "other_areas_description_other_1": ${ repairs_checklist.other_areas.other[0].description }
-      - "other_areas1_other_2": ${ defined("repairs_checklist.other_areas.other[1]") }
+      - "other_areas1_other_2": ${ defined('repairs_checklist.other_areas.other[1]') }
       - "other_problem_2": ${ repairs_checklist.other_areas.other[1].problem }
       - "other_areas_started_other_2": ${ repairs_checklist.other_areas.other[1].started }
       - "other_areas_description_other_2": ${ repairs_checklist.other_areas.other[1].description }

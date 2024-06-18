@@ -54,7 +54,7 @@ setup(name='docassemble.RequestForRepairsLetter',
       url='https://courtformsonline.org',
       packages=find_packages(),
       namespace_packages=['docassemble'],
-      install_requires=['docassemble.AssemblyLine>=2.28.1'],
+      install_requires=['docassemble.AssemblyLine>=2.28.1', 'docassemble.RequestForRepairsLetter'],
       zip_safe=False,
       package_data=find_package_data(where='docassemble/RequestForRepairsLetter/', package='docassemble.RequestForRepairsLetter'),
      )

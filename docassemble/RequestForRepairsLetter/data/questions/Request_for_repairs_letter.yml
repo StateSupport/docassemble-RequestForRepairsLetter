@@ -96,7 +96,8 @@ objects:
   - repairs_checklist.other_areas.utility_bills: DAObject
   - repairs_checklist.other_areas.cabinets: DAObject
   - repairs_checklist.other_areas.other: DAList.using(object_type=DAObject,complete_attribute="problem")
-  - other_parties: ALPeopleList.using(there_are_any=True) # (ask_number=True,target_number=1)
+  - other_parties: ALPeopleList.using(complete_attribute="complete",there_are_any=True) 
+  - users: ALPeopleList.using(complete_attribute="complete",there_are_any=True)
 ---
 generic object: ALIndividual
 template: x.person_type_label
@@ -139,11 +140,9 @@ code: |
   repairs_checklist.other_areas.other.gather()
   repairs_summary
   other_parties.gather()
-  other_parties[0].address.address
   users.gather()
-  set_parts(subtitle=str(users))
-  set_progress(25)
-  users[0].address.address
+  #set_parts(subtitle=str(users))
+  #set_progress(25)
   # plumbing_other
   signature_date
   interview_order_Request_for_repairs_letter = True
@@ -178,7 +177,7 @@ subquestion: |
   Before you get started, you need to gather:
   
   1. Your landlord's name
-  2. Your landlord's address
+  2. Your landlord's and/or management company's address
   3. Details about your repair issues
 ---
 id: Introduction
@@ -939,58 +938,24 @@ subquestion: |
   | ${ ":check:" if repairs_checklist.other_areas.other.there_are_any == True else "" } | ${ item.problem } | ${ item.started } | ${ item.description } | ${ action_button_html(url_action(item.attr_name('problem'), label="Edit")) }
   % endfor
   % endif
+#---
+#code: |
+#  # If the form is a letter, it _always_ is addressed to someone.
+#  if al_form_type == 'letter':
+#    other_parties.there_are_any = True
 ---
 code: |
-  # If the form is a letter, it _always_ is addressed to someone.
-  if al_form_type == 'letter':
-    other_parties.there_are_any = True
+  other_parties[i].name_fields(person_or_business='unsure')
+  other_parties[i].address.address
+  other_parties[i].complete = True
 ---
-#id: name of ALIndividual
-#sets:
-#  - x.name.first
-#  - x.name.last
-#  - x.name.middle
-#  - x.name.suffix
-#generic object: ALIndividual
-#question: |
-#  What is ${x.object_possessive('name')}?
-#fields:
-#  - code: |
-#      x.name_fields()
-#---
-sets:
-  - other_parties[i].name.first
-  - other_parties[i].name.last
-  - other_parties[i].name.middle
-  - other_parties[i].name.suffix
-id: names of opposing parties
-question: |
-  Who will you send this letter to?
-subquestion: |
-  List the names of your landlord, property manager, and/or management company that you will send this letter to. List all that apply.
-  
-  % if user_started_case:
-  Name the ${ ordinal(i) } below. You will then be asked to add any others.
-  % else:
-  Name of ${ ordinal(i) } **plaintiff** or petitioner in this matter
-  % endif
-fields:
-  - code: |
-      other_parties[i].name_fields(person_or_business='unsure')
-#fields: |
-#  - no label: other_parties.there_are_any
-#    datatype: yesnoradio
----
-id: any other opposing parties
-question: |
-  % if user_started_case:
-  Are there any others?
-  % else:
-  Is there any other **plaintiff** or petitioner in this matter?
-  % endif
-fields:
-  - no label: other_parties.there_is_another
-    datatype: yesnoradio
+code: |
+  users[i].name.first
+  users[i].name.last
+  users[i].name.middle
+  users[i].name.suffix
+  users[i].address.address
+  users[i].complete = True
 ---
 id: preview Request_for_repairs_letter
 question: |
@@ -1674,8 +1639,8 @@ attachment:
       - "other_parties1": ${ other_parties[0] }
       - "other_parties1_address_address": ${ other_parties[0].address.address }
       - "other_parties1_address_line_two": ${ other_parties[0].address.line_two() }
-      - "users1_name": ${ users[0] }
-      - "users1_name": ${ users[0] }
+      - "users1_name_1": ${ users[0] }
+      - "users1_name_2": ${ users[1] }
       - "users1_address_on_one_line": ${ users[0].address.on_one_line() }
       - "users1_signature": ${ users[0].signature }
       - "signature_date": ${ signature_date.format() }

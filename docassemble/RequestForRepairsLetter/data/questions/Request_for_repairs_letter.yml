@@ -1636,11 +1636,11 @@ attachment:
       - "other_problem_4": ${ repairs_checklist.other_areas.other[3].problem }
       - "other_areas_started_other_4": ${ repairs_checklist.other_areas.other[3].started }
       - "other_areas_description_other_4": ${ repairs_checklist.other_areas.other[3].description }
-      - "other_parties1": ${ other_parties[0] }
+      - "multi_other_parties_comma": ${ comma_and_list(other_parties[0], other_parties[1]) }
+      #- "other_parties1": ${ other_parties[0] } #add comma_and_list function here to list all OPs or look into generating separate docs w/each OP on it's own copy
       - "other_parties1_address_address": ${ other_parties[0].address.address }
       - "other_parties1_address_line_two": ${ other_parties[0].address.line_two() }
-      - "users1_name_1": ${ users[0] }
-      - "users1_name_2": ${ users[1] }
+      - "multi_user_comma": ${ comma_and_list(users[0], users[1]) }
       - "users1_address_on_one_line": ${ users[0].address.on_one_line() }
-      - "users1_signature": ${ users[0].signature }
+      - "users1_signature": ${ comma_and_list(users[0].signature, users[1].signature) } #does this logic work here to collect both signatures?? 
       - "signature_date": ${ signature_date.format() }

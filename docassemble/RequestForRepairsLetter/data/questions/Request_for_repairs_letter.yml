@@ -9,7 +9,7 @@ metadata:
     Repairs request letter
   description: |-
     Draft a request for repairs letter to your landlord if you need repairs made to a rental you are living in.
-  tags: []
+#  tags: []
   authors:
     - Court Forms Online
   allowed_courts: []
@@ -32,35 +32,12 @@ code: |
   interview_short_title = "Write a Request for repairs letter"
 ---
 code: |
-  al_form_type = "letter" 
+  if al_form_type in ['letter', 'starts_case']:
+    user_started_case = True 
+  #al_form_type = "letter" 
 ---
 objects:
-#  - users: ALPeopleList
-#  - repairs_checklist: DAObject
-#  - repairs_checklist.infestations: DAObject
-#  - repairs_checklist.electrical: DAObject
-#  - repairs_checklist.plumbing: DAObject
-#  - repairs_checklist.windows: DAObject
-#  - repairs_checklist.doors: DAObject
-#  - repairs_checklist.walls_ceiling_floors: DAObject
-#  - repairs_checklist.furnace: DAObject
-#  - repairs_checklist.appliances: DAObject
-#  - repairs_checklist.security_privacy: DAObject
-#  - repairs_checklist.other_areas: DAObject
-#  - repairs_checklist.other_areas.other: DAList
-  #- repairs_checklist: |
-  #   DAList.using(object_type=Thing,complete_attribute='complete',there_are_any=True)
-  #- repairs_checklist[i].collect_other: |
-  #   DAList.using(object_type=Thing,complete_attribute='complete',there_are_any=True)
-  # or
-  #repairs_checklist: DAObject
-  #repairs_checklist[i]: DAObject
-  #repairs_checklist.other_areas_other: DAList
-  # or
-  #repairs_checklist: DAObject.using(gathered=True)
-  #repairs_checklist.infestations_mice: DAObject
-  #repairs_checklist.other_areas_other: DAList
-  # or
+  - al_logo: DAStaticFile.using(filename="MNfavicon-96x96.png", alt_text="LawHelpMN") 
   - repairs_checklist: DAObject.using(gathered=True)
   - repairs_checklist.infestations: DAObject
   - repairs_checklist.infestations.mice: DAObject
@@ -120,10 +97,23 @@ objects:
   - repairs_checklist.other_areas.utility_bills: DAObject
   - repairs_checklist.other_areas.cabinets: DAObject
   - repairs_checklist.other_areas.other: DAList.using(object_type=DAObject,complete_attribute="problem")
-#---
-#mandatory: true
-#code: |
-#  repairs_checklist.object_type = Thing
+  - other_parties: ALPeopleList.using(complete_attribute="complete",there_are_any=True) 
+  - users: ALPeopleList.using(complete_attribute="complete",there_are_any=True)
+---
+generic object: ALIndividual
+template: x.person_type_label
+content: |
+  Is this a person or a company?
+---
+generic object: ALIndividual
+template: x.business_choice_label
+content: |
+  Company
+---
+generic object: ALIndividual
+template: x.business_name_label
+content: |
+  Name of company
 ---
 sections:
   - review_Request_for_repairs_letter: Review your answers
@@ -138,15 +128,6 @@ code: |
   user_role = "plaintiff"
   user_ask_role = "plaintiff"
   introduction
-  #repairs_checklist.gather()
-  #other
-  #repairs_checklist
-  #other
-  #repairs_checklist[0].collect_other.gather()
-  #if repairs_checklist[0].collect_other == True:
-  #  repairs_checklist[i].collect_other.gather()
-  #else:
-  #  repairs_summary
   infestations
   electrical
   plumbing
@@ -158,21 +139,11 @@ code: |
   security_privacy
   other_areas
   repairs_checklist.other_areas.other.gather()
-  #if repairs_checklist.other_areas.other == True:
-  #  repairs_checklist.other_areas.other.gather()
-  #else:
-  #  repairs_summary
-  #if repairs_checklist.other_areas.other.there_are_any == True:
-  #  repairs_checklist.other_areas.other.gather()
-  #else:
-  #  repairs_summary
   repairs_summary
   other_parties.gather()
-  other_parties[0].address.address
   users.gather()
-  set_parts(subtitle=str(users))
-  set_progress(25)
-  users[0].address.address
+  #set_parts(subtitle=str(users))
+  #set_progress(25)
   # plumbing_other
   signature_date
   interview_order_Request_for_repairs_letter = True
@@ -207,7 +178,7 @@ subquestion: |
   Before you get started, you need to gather:
   
   1. Your landlord's name
-  2. Your landlord's address
+  2. Your landlord's and/or management company's address
   3. Details about your repair issues
 ---
 id: Introduction
@@ -232,172 +203,10 @@ subquestion: |
   These are called the “Covenants of Habitability.” They are set by law and can’t be changed or ignored, even if the lease says something different. The landlord is responsible for repairs to the home unless the tenant damages the home on purpose or by being reckless or careless.
   
   Complete this form to request that your landlord make the necessary repairs within 14 days.
-#code: |
-#  repairs_checklist[i].infestations_problem_mice
-#  repairs_checklist[i].infestations_started_mice
-#  repairs_checklist[i].infestations_description_mice
-#  repairs_checklist[i].infestations_problem_cockroaches
-#  repairs_checklist[i].infestations_started_cockroaches
-#  repairs_checklist[i].infestations_description_cockroaches
-#  repairs_checklist[i].infestations_problem_bedbugs
-#  repairs_checklist[i].infestations_started_bedbugs
-#  repairs_checklist[i].infestations_description_bedbugs
-#  repairs_checklist[i].infestations_problem_other
-#  repairs_checklist[i].infestations_started_other
-#  repairs_checklist[i].infestations_description_other
-#  repairs_checklist[i].electrical_problem_smoke_detector
-#  repairs_checklist[i].electrical_started_smoke_detector
-#  repairs_checklist[i].electrical_description_smoke_detector
-#  repairs_checklist[i].electrical_problem_wiring
-#  repairs_checklist[i].electrical_started_wiring
-#  repairs_checklist[i].electrical_description_wiring
-#  repairs_checklist[i].electrical_problem_circuits
-#  repairs_checklist[i].electrical_started_circuits
-#  repairs_checklist[i].electrical_description_circuits
-#  repairs_checklist[i].electrical_problem_outlet_covers
-#  repairs_checklist[i].electrical_started_outlet_covers
-#  repairs_checklist[i].electrical_description_outlet_covers
-#  repairs_checklist[i].electrical_problem_other
-#  repairs_checklist[i].electrical_started_other
-#  repairs_checklist[i].electrical_description_other
-#  repairs_checklist[i].plumbing_problem_hot_water
-#  repairs_checklist[i].plumbing_started_hot_water
-#  repairs_checklist[i].plumbing_description_hot_water
-#  repairs_checklist[i].plumbing_problem_clogged_pipes
-#  repairs_checklist[i].plumbing_started_clogged_pipes
-#  repairs_checklist[i].plumbing_description_clogged_pipes
-#  repairs_checklist[i].plumbing_problem_water_pressure
-#  repairs_checklist[i].plumbing_started_water_pressure
-#  repairs_checklist[i].plumbing_description_water_pressure
-#  repairs_checklist[i].plumbing_problem_dripping_faucets
-#  repairs_checklist[i].plumbing_started_dripping_faucets
-#  repairs_checklist[i].plumbing_description_dripping_faucets
-#  repairs_checklist[i].plumbing_problem_leaks
-#  repairs_checklist[i].plumbing_started_leaks
-#  repairs_checklist[i].plumbing_description_leaks
-#  repairs_checklist[i].plumbing_problem_other
-#  repairs_checklist[i].plumbing_started_other
-#  repairs_checklist[i].plumbing_description_other
-#  repairs_checklist[i].windows_problem_screens
-#  repairs_checklist[i].windows_started_screens
-#  repairs_checklist[i].windows_description_screens
-#  repairs_checklist[i].windows_problem_storm_windows
-#  repairs_checklist[i].windows_started_storm_windows
-#  repairs_checklist[i].windows_description_storm_windows
-#  repairs_checklist[i].windows_problem_broken_glass
-#  repairs_checklist[i].windows_started_broken_glass
-#  repairs_checklist[i].windows_description_broken_glass
-#  repairs_checklist[i].windows_problem_locks
-#  repairs_checklist[i].windows_started_locks
-#  repairs_checklist[i].windows_description_locks
-#  repairs_checklist[i].windows_problem_other
-#  repairs_checklist[i].windows_started_other
-#  repairs_checklist[i].windows_description_other
-#  repairs_checklist[i].doors_problem_deadbolt_locks
-#  repairs_checklist[i].doors_started_deadbolt_locks
-#  repairs_checklist[i].doors_description_deadbolt_locks
-#  repairs_checklist[i].doors_problem_broken_locks
-#  repairs_checklist[i].doors_started_broken_locks
-#  repairs_checklist[i].doors_description_broken_locks
-#  repairs_checklist[i].doors_problem_door_knobs
-#  repairs_checklist[i].doors_started_door_knobs
-#  repairs_checklist[i].doors_description_door_knobs
-#  repairs_checklist[i].doors_problem_other
-#  repairs_checklist[i].doors_started_other
-#  repairs_checklist[i].doors_description_other
-#  repairs_checklist[i].walls_ceiling_floors_problem_paint
-#  repairs_checklist[i].walls_ceiling_floors_started_paint
-#  repairs_checklist[i].walls_ceiling_floors_description_paint
-#  repairs_checklist[i].walls_ceiling_floors_problem_holes
-#  repairs_checklist[i].walls_ceiling_floors_started_holes
-#  repairs_checklist[i].walls_ceiling_floors_description_holes
-#  repairs_checklist[i].walls_ceiling_floors_problem_leaky_roof_ceiling
-#  repairs_checklist[i].walls_ceiling_floors_started_leaky_roof_ceiling
-#  repairs_checklist[i].walls_ceiling_floors_description_leaky_roof_ceiling
-#  repairs_checklist[i].walls_ceiling_floors_problem_carpet
-#  repairs_checklist[i].walls_ceiling_floors_started_carpet
-#  repairs_checklist[i].walls_ceiling_floors_description_carpet
-#  repairs_checklist[i].walls_ceiling_floors_problem_tiles_linoleum
-#  repairs_checklist[i].walls_ceiling_floors_started_tiles_linoleum
-#  repairs_checklist[i].walls_ceiling_floors_description_tiles_linoleum
-#  repairs_checklist[i].walls_ceiling_floors_problem_other
-#  repairs_checklist[i].walls_ceiling_floors_started_other
-#  repairs_checklist[i].walls_ceiling_floors_description_other
-#  repairs_checklist[i].furnace_problem_heat
-#  repairs_checklist[i].furnace_started_heat
-#  repairs_checklist[i].furnace_description_heat
-#  repairs_checklist[i].furnace_problem_gas_leaks
-#  repairs_checklist[i].furnace_started_gas_leaks
-#  repairs_checklist[i].furnace_description_gas_leaks
-#  repairs_checklist[i].furnace_problem_other
-#  repairs_checklist[i].furnace_started_other
-#  repairs_checklist[i].furnace_description_other
-#  repairs_checklist[i].appliances_problem_stove
-#  repairs_checklist[i].appliances_started_stove
-#  repairs_checklist[i].appliances_description_stove
-#  repairs_checklist[i].appliances_problem_refrigerator
-#  repairs_checklist[i].appliances_started_refrigerator
-#  repairs_checklist[i].appliances_description_refrigerator
-#  repairs_checklist[i].appliances_problem_other
-#  repairs_checklist[i].appliances_started_other
-#  repairs_checklist[i].appliances_description_other
-#  repairs_checklist[i].security_problem_illegal_entries
-#  repairs_checklist[i].security_started_illegal_entries
-#  repairs_checklist[i].security_description_illegal_entries
-#  repairs_checklist[i].security_problem_disturbance
-#  repairs_checklist[i].security_started_disturbance
-#  repairs_checklist[i].security_description_disturbance
-#  repairs_checklist[i].security_problem_break_ins
-#  repairs_checklist[i].security_started_break_ins
-#  repairs_checklist[i].security_description_break_ins
-#  repairs_checklist[i].security_problem_unsecure_doors
-#  repairs_checklist[i].security_started_unsecure_doors
-#  repairs_checklist[i].security_description_unsecure_doors
-#  repairs_checklist[i].security_problem_other
-#  repairs_checklist[i].security_started_other
-#  repairs_checklist[i].security_description_other
-#  repairs_checklist[i].other_areas_problem_yard
-#  repairs_checklist[i].other_areas_started_yard
-#  repairs_checklist[i].other_areas_description_yard
-#  repairs_checklist[i].other_areas_problem_trash
-#  repairs_checklist[i].other_areas_started_trash
-#  repairs_checklist[i].other_areas_description_trash
-#  repairs_checklist[i].other_areas_problem_garage
-#  repairs_checklist[i].other_areas_started_garage
-#  repairs_checklist[i].other_areas_description_garage
-#  repairs_checklist[i].other_areas_problem_basement
-#  repairs_checklist[i].other_areas_started_basement
-#  repairs_checklist[i].other_areas_description_basement
-#  repairs_checklist[i].other_areas_problem_utility_bills
-#  repairs_checklist[i].other_areas_started_utility_bills
-#  repairs_checklist[i].other_areas_description_utility_bills
-#  repairs_checklist[i].other_areas_problem_cabinets
-#  repairs_checklist[i].other_areas_started_cabinets
-#  repairs_checklist[i].other_areas_description_cabinets
-#  repairs_checklist[i].complete = True
-#---
-#code: |
-#  repairs_checklist[i].other_areas.other_problem_1
-#  repairs_checklist[i].other_areas.other_started_1
-#  repairs_checklist[i].other_areas.other_description_1
-#  repairs_checklist[i].other_areas.other.complete = True
-# or
-#  repairs_checklist[i].collect_other[j].other_problem_1
-#  repairs_checklist[i].collect_other[j].other_areas_started_other_1
-#  repairs_checklist[i].collect_other[j].other_areas_description_other_1
-#  repairs_checklist[i].collect_other[j].complete = True
-#---
-#code: |
-#  repairs_checklist.table
-#  repairs_checklist[i].other_areas.other.table
-#  repairs_checklist[i].other_areas.other.gather()
-#  repairs_checklist.gather()
-#  repairs_checklist[i].collect_other.table
-#  repairs_checklist[i].collect_other.gather()
 ---
 #mandatory: True
 id: repairs_checklist
-continue button field: infestations #repairs_checklist
+continue button field: infestations 
 question: |
   <b>Infestations</b>
 subquestion: |
@@ -1046,14 +855,6 @@ fields:
     datatype: yesno
     required: False
     grid: 4
-#  - no label: repairs_checklist.other_areas.other.started
-#    maxlength: 25
-#    required: False
-#    grid: 3
-#  - no label: repairs_checklist.other_areas.other.description
-#    maxlength: 75
-#    required: False
-#    grid: 5
 features:
   labels above fields: True
 ---
@@ -1067,54 +868,6 @@ fields:
     input type: area
   - Are there any others?: repairs_checklist.other_areas.other.there_is_another
     datatype: yesnoradio
-#---
-#question: |
-#  Add items for any other areas needing repairs.
-#  fields:
-#    - Add another area: repairs_checklist.other_areas.other.gather()
-#---
-#question: |
-#  Do you have any others?
-#yesno: repairs_checklist.there_is_another
-#---
-#continue button field: other
-#question: |
-#  Do you have any other repair issues that were not listed on the previous pages? 
-#yesno: repairs_checklist.other_areas.other.there_are_any #repairs_checklist[0].collect_other.there_are_any
-#fields:
-#  - no label: other
-#    datatype: radio
-#    choices: 
-#      - Yes: other_yes
-#      - No: other_no
-#---
-#question: |
-#  <b>Other issues</b>
-#subquestion: |
-#  List the repair issues you have here. Include a date or timeframe for when the issue started and a description of the issue.
-#fields:
-#  - Problem: repairs_checklist[i].other_areas.other.problem
-#repairs_checklist[i].collect_other[j].other_problem_1
-#    maxlength: 30
-#    required: False
-#    grid: 4
-#  - When it started: repairs_checklist[i].other_areas.other.started
-#repairs_checklist[i].collect_other[j].other_areas_started_other_1
-#    maxlength: 25
-#    required: False
-#    grid: 3
-#  - Description: repairs_checklist[i].other_areas.other.description
-#repairs_checklist[i].collect_other[j].other_areas_description_other_1
-#    maxlength: 75
-#    required: False
-#    grid: 5
-#features:
-#  labels above fields: True
-#---
-#continue button field: other
-#question: |
-# Are there any others?
-#yesno: repairs_checklist.other_areas.other.there_is_another #repairs_checklist[i].collect_other.there_is_another
 ---
 #mandatory: True
 id: repairs_summary
@@ -1122,317 +875,88 @@ continue button field: repairs_summary
 question: |
   Here's a summary of the repairs you are asking your landlord to make.
 subquestion: |
-  | **:check:** | **Problem** | **Start Date** | **Description** |
+  | **:check:** | **Problem** | **Start Date** | **Description** | **Review**
   |---|:-:|--:|
   | | **Infestations** | | |
-  | ${ ":check:" if repairs_checklist.infestations.mice.problem == True else "" } | Mice | ${ repairs_checklist.infestations.mice.started } | ${ repairs_checklist.infestations.mice.description } |
-  | ${ ":check:" if repairs_checklist.infestations.cockroaches.problem == True else "" } | Cockroaches | ${ repairs_checklist.infestations.cockroaches.started } | ${ repairs_checklist.infestations.cockroaches.description } |
-  | ${ ":check:" if repairs_checklist.infestations.bedbugs.problem == True else "" } | Bedbugs | ${ repairs_checklist.infestations.bedbugs.started } | ${ repairs_checklist.infestations.bedbugs.description } |
-  | ${ ":check:" if repairs_checklist.infestations.other.problem == True else "" } | Other | ${ repairs_checklist.infestations.other.started } | ${ repairs_checklist.infestations.other.description } |
+  | ${ ":check:" if repairs_checklist.infestations.mice.problem == True else "" } | Mice | ${ repairs_checklist.infestations.mice.started } | ${ repairs_checklist.infestations.mice.description } | ${ action_button_html(url_action('repairs_checklist.infestations.mice.problem', label="Edit")) }  
+  | ${ ":check:" if repairs_checklist.infestations.cockroaches.problem == True else "" } | Cockroaches | ${ repairs_checklist.infestations.cockroaches.started } | ${ repairs_checklist.infestations.cockroaches.description } | ${ action_button_html(url_action('repairs_checklist.infestations.cockroaches.problem', label="Edit")) }  
+  | ${ ":check:" if repairs_checklist.infestations.bedbugs.problem == True else "" } | Bedbugs | ${ repairs_checklist.infestations.bedbugs.started } | ${ repairs_checklist.infestations.bedbugs.description } | ${ action_button_html(url_action('repairs_checklist.infestations.bedbugs.problem', label="Edit")) }  
+  | ${ ":check:" if repairs_checklist.infestations.other.problem == True else "" } | Other | ${ repairs_checklist.infestations.other.started } | ${ repairs_checklist.infestations.other.description } | ${ action_button_html(url_action('repairs_checklist.infestations.other.problem', label="Edit")) }  
   | | **Electrical** | | |
-  | ${ ":check:" if repairs_checklist.electrical.smoke_detector.problem == True else "" } | No/broken smoke detector | ${ repairs_checklist.electrical.smoke_detector.started } | ${ repairs_checklist.electrical.smoke_detector.description } |
-  | ${ ":check:" if repairs_checklist.electrical.wiring.problem == True else "" } | Exposed wiring | ${ repairs_checklist.electrical.wiring.started } | ${ repairs_checklist.electrical.wiring.description } |
-  | ${ ":check:" if repairs_checklist.electrical.circuits.problem == True else "" } | Short circuits/faulty electrical | ${ repairs_checklist.electrical.circuits.started } | ${ repairs_checklist.electrical.circuits.description } |
-  | ${ ":check:" if repairs_checklist.electrical.outlet_covers.problem == True else "" } | No cover plates on outlets | ${ repairs_checklist.electrical.outlet_covers.started } | ${ repairs_checklist.electrical.wiring.description } |
-  | ${ ":check:" if repairs_checklist.electrical.other.problem == True else "" } | Other | ${ repairs_checklist.electrical.other.started } | ${ repairs_checklist.electrical.wiring.description } |
+  | ${ ":check:" if repairs_checklist.electrical.smoke_detector.problem == True else "" } | No/broken smoke detector | ${ repairs_checklist.electrical.smoke_detector.started } | ${ repairs_checklist.electrical.smoke_detector.description } | ${ action_button_html(url_action('repairs_checklist.electrical.smoke_detector.problem', label="Edit")) }  
+  | ${ ":check:" if repairs_checklist.electrical.wiring.problem == True else "" } | Exposed wiring | ${ repairs_checklist.electrical.wiring.started } | ${ repairs_checklist.electrical.wiring.description } | ${ action_button_html(url_action('repairs_checklist.electrical.wiring.problem', label="Edit")) }  
+  | ${ ":check:" if repairs_checklist.electrical.circuits.problem == True else "" } | Short circuits/faulty electrical | ${ repairs_checklist.electrical.circuits.started } | ${ repairs_checklist.electrical.circuits.description } | ${ action_button_html(url_action('repairs_checklist.electrical.circuits.problem', label="Edit")) }  
+  | ${ ":check:" if repairs_checklist.electrical.outlet_covers.problem == True else "" } | No cover plates on outlets | ${ repairs_checklist.electrical.outlet_covers.started } | ${ repairs_checklist.electrical.wiring.description } | ${ action_button_html(url_action('repairs_checklist.electrical.outlet_covers.problem', label="Edit")) }  
+  | ${ ":check:" if repairs_checklist.electrical.other.problem == True else "" } | Other | ${ repairs_checklist.electrical.other.started } | ${ repairs_checklist.electrical.wiring.description } | ${ action_button_html(url_action('repairs_checklist.electrical.other.problem', label="Edit")) }  
   | | **Plumbing** | | |
-  | ${ ":check:" if repairs_checklist.plumbing.hot_water.problem == True else "" } | No hot water | ${ repairs_checklist.plumbing.hot_water.started } | ${ repairs_checklist.plumbing.hot_water.description } |
-  | ${ ":check:" if repairs_checklist.plumbing.clogged_pipes.problem == True else "" } | Clogged pipes/toilets | ${ repairs_checklist.plumbing.clogged_pipes.started } | ${ repairs_checklist.plumbing.clogged_pipes.description } |
-  | ${ ":check:" if repairs_checklist.plumbing.water_pressure.problem == True else "" } | Bad water pressure | ${ repairs_checklist.plumbing.water_pressure.started } | ${ repairs_checklist.plumbing.water_pressure.description } |
-  | ${ ":check:" if repairs_checklist.plumbing.dripping_faucets.problem == True else "" } | Dripping faucets | ${ repairs_checklist.plumbing.dripping_faucets.started } | ${ repairs_checklist.plumbing.dripping_faucets.description } |
-  | ${ ":check:" if repairs_checklist.plumbing.leaks.problem == True else "" } | Leaks | ${ repairs_checklist.plumbing.leaks.started } | ${ repairs_checklist.plumbing.leaks.description } |
-  | ${ ":check:" if repairs_checklist.plumbing.other.problem == True else "" } | Other | ${ repairs_checklist.plumbing.other.started } | ${ repairs_checklist.plumbing.other.description } |
+  | ${ ":check:" if repairs_checklist.plumbing.hot_water.problem == True else "" } | No hot water | ${ repairs_checklist.plumbing.hot_water.started } | ${ repairs_checklist.plumbing.hot_water.description } | ${ action_button_html(url_action('repairs_checklist.plumbing.hot_water.problem', label="Edit")) }  
+  | ${ ":check:" if repairs_checklist.plumbing.clogged_pipes.problem == True else "" } | Clogged pipes/toilets | ${ repairs_checklist.plumbing.clogged_pipes.started } | ${ repairs_checklist.plumbing.clogged_pipes.description } | ${ action_button_html(url_action('repairs_checklist.plumbing.clogged_pipes.problem', label="Edit")) }  
+  | ${ ":check:" if repairs_checklist.plumbing.water_pressure.problem == True else "" } | Bad water pressure | ${ repairs_checklist.plumbing.water_pressure.started } | ${ repairs_checklist.plumbing.water_pressure.description } | ${ action_button_html(url_action('repairs_checklist.plumbing.water_pressure.problem', label="Edit")) }  
+  | ${ ":check:" if repairs_checklist.plumbing.dripping_faucets.problem == True else "" } | Dripping faucets | ${ repairs_checklist.plumbing.dripping_faucets.started } | ${ repairs_checklist.plumbing.dripping_faucets.description } | ${ action_button_html(url_action('repairs_checklist.plumbing.dripping_faucets.problem', label="Edit")) }  
+  | ${ ":check:" if repairs_checklist.plumbing.leaks.problem == True else "" } | Leaks | ${ repairs_checklist.plumbing.leaks.started } | ${ repairs_checklist.plumbing.leaks.description } | ${ action_button_html(url_action('repairs_checklist.plumbing.leaks.problem', label="Edit")) }  
+  | ${ ":check:" if repairs_checklist.plumbing.other.problem == True else "" } | Other | ${ repairs_checklist.plumbing.other.started } | ${ repairs_checklist.plumbing.other.description } | ${ action_button_html(url_action('repairs_checklist.plumbing.other.problem', label="Edit")) }  
   | | **Windows** |  |  |
-  | ${ ":check:" if repairs_checklist.windows.screens.problem == True else "" } | Missing/torn screens | ${ repairs_checklist.windows.screens.started } | ${ repairs_checklist.windows.screens.description } |
-  | ${ ":check:" if repairs_checklist.windows.storm_windows.problem == True else "" } | Missing storm windows | ${ repairs_checklist.windows.storm_windows.started } | ${ repairs_checklist.windows.storm_windows.description } |
-  | ${ ":check:" if repairs_checklist.windows.broken_glass.problem == True else "" } | Broken/cracked glass  | ${ repairs_checklist.windows.broken_glass.started } | ${ repairs_checklist.windows.broken_glass.description } |
-  | ${ ":check:" if repairs_checklist.windows.locks.problem == True else "" } | Missing/broken locks | ${ repairs_checklist.windows.locks.started } | ${ repairs_checklist.windows.locks.description } |
-  | ${ ":check:" if repairs_checklist.windows.other.problem == True else "" } | Other | ${ repairs_checklist.windows.other.started } | ${ repairs_checklist.windows.other.description } |
+  | ${ ":check:" if repairs_checklist.windows.screens.problem == True else "" } | Missing/torn screens | ${ repairs_checklist.windows.screens.started } | ${ repairs_checklist.windows.screens.description } | ${ action_button_html(url_action('repairs_checklist.windows.screens.problem', label="Edit")) }  
+  | ${ ":check:" if repairs_checklist.windows.storm_windows.problem == True else "" } | Missing storm windows | ${ repairs_checklist.windows.storm_windows.started } | ${ repairs_checklist.windows.storm_windows.description } | ${ action_button_html(url_action('repairs_checklist.windows.storm_windows.problem', label="Edit")) }  
+  | ${ ":check:" if repairs_checklist.windows.broken_glass.problem == True else "" } | Broken/cracked glass  | ${ repairs_checklist.windows.broken_glass.started } | ${ repairs_checklist.windows.broken_glass.description } | ${ action_button_html(url_action('repairs_checklist.windows.broken_glass.problem', label="Edit")) }  
+  | ${ ":check:" if repairs_checklist.windows.locks.problem == True else "" } | Missing/broken locks | ${ repairs_checklist.windows.locks.started } | ${ repairs_checklist.windows.locks.description } | ${ action_button_html(url_action('repairs_checklist.windows.locks.problem', label="Edit")) }  
+  | ${ ":check:" if repairs_checklist.windows.other.problem == True else "" } | Other | ${ repairs_checklist.windows.other.started } | ${ repairs_checklist.windows.other.description } | ${ action_button_html(url_action('repairs_checklist.windows.other.problem', label="Edit")) }  
   | | **Doors** |  |  |
-  | ${ ":check:" if repairs_checklist.doors.deadbolt_locks.problem == True else "" } | No deadbolt locks | ${ repairs_checklist.doors.deadbolt_locks.started } | ${ repairs_checklist.doors.deadbolt_locks.description } |
-  | ${ ":check:" if repairs_checklist.doors.broken_locks.problem == True else "" } | Broken locks | ${ repairs_checklist.doors.broken_locks.started } | ${ repairs_checklist.doors.broken_locks.description } |
-  | ${ ":check:" if repairs_checklist.doors.door_knobs.problem == True else "" } | Missing/broken door knobs | ${ repairs_checklist.doors.door_knobs.started } | ${ repairs_checklist.doors.door_knobs.description } |
-  | ${ ":check:" if repairs_checklist.doors.other.problem == True else "" } | Other | ${ repairs_checklist.doors.other.started } | ${ repairs_checklist.doors.other.description } |
+  | ${ ":check:" if repairs_checklist.doors.deadbolt_locks.problem == True else "" } | No deadbolt locks | ${ repairs_checklist.doors.deadbolt_locks.started } | ${ repairs_checklist.doors.deadbolt_locks.description } | ${ action_button_html(url_action('repairs_checklist.doors.deadbolt_locks.problem', label="Edit")) }  
+  | ${ ":check:" if repairs_checklist.doors.broken_locks.problem == True else "" } | Broken locks | ${ repairs_checklist.doors.broken_locks.started } | ${ repairs_checklist.doors.broken_locks.description } | ${ action_button_html(url_action('repairs_checklist.doors.broken_locks.problem', label="Edit")) }  
+  | ${ ":check:" if repairs_checklist.doors.door_knobs.problem == True else "" } | Missing/broken door knobs | ${ repairs_checklist.doors.door_knobs.started } | ${ repairs_checklist.doors.door_knobs.description } | ${ action_button_html(url_action('repairs_checklist.doors.door_knobs.problem', label="Edit")) }  
+  | ${ ":check:" if repairs_checklist.doors.other.problem == True else "" } | Other | ${ repairs_checklist.doors.other.started } | ${ repairs_checklist.doors.other.description } | ${ action_button_html(url_action('repairs_checklist.doors.other.problem', label="Edit")) }  
   | | **Walls / Ceiling / Floors** |  |  |
-  | ${ ":check:" if repairs_checklist.walls_ceiling_floors.paint.problem == True else "" } | Chipped/flaking paint | ${ repairs_checklist.walls_ceiling_floors.paint.started } | ${ repairs_checklist.walls_ceiling_floors.paint.description } |
-  | ${ ":check:" if repairs_checklist.walls_ceiling_floors.holes.problem == True else "" } | Holes or cracks in walls | ${ repairs_checklist.walls_ceiling_floors.holes.started } | ${ repairs_checklist.walls_ceiling_floors.holes.description } |
-  | ${ ":check:" if repairs_checklist.walls_ceiling_floors.leaky_roof_ceiling.problem == True else "" } | Leaky roof or ceiling | ${ repairs_checklist.walls_ceiling_floors.leaky_roof_ceiling.started } | ${ repairs_checklist.walls_ceiling_floors.leaky_roof_ceiling.description } |
-  | ${ ":check:" if repairs_checklist.walls_ceiling_floors.carpet.problem == True else "" } | Holes in carpet | ${ repairs_checklist.walls_ceiling_floors.carpet.started } | ${ repairs_checklist.walls_ceiling_floors.carpet.description } |
-  | ${ ":check:" if repairs_checklist.walls_ceiling_floors.tiles_linoleum.problem == True else "" } | Missing/broken tiles or linoleum | ${ repairs_checklist.walls_ceiling_floors.tiles_linoleum.started } | ${ repairs_checklist.walls_ceiling_floors.tiles_linoleum.description } |
-  | ${ ":check:" if repairs_checklist.walls_ceiling_floors.other.problem == True else "" } | Other | ${ repairs_checklist.walls_ceiling_floors.other.started } | ${ repairs_checklist.walls_ceiling_floors.other.description } |
+  | ${ ":check:" if repairs_checklist.walls_ceiling_floors.paint.problem == True else "" } | Chipped/flaking paint | ${ repairs_checklist.walls_ceiling_floors.paint.started } | ${ repairs_checklist.walls_ceiling_floors.paint.description } | ${ action_button_html(url_action('repairs_checklist.walls_ceiling_floors.paint.problem', label="Edit")) }  
+  | ${ ":check:" if repairs_checklist.walls_ceiling_floors.holes.problem == True else "" } | Holes or cracks in walls | ${ repairs_checklist.walls_ceiling_floors.holes.started } | ${ repairs_checklist.walls_ceiling_floors.holes.description } | ${ action_button_html(url_action('repairs_checklist.walls_ceiling_floors.holes.problem', label="Edit")) }  
+  | ${ ":check:" if repairs_checklist.walls_ceiling_floors.leaky_roof_ceiling.problem == True else "" } | Leaky roof or ceiling | ${ repairs_checklist.walls_ceiling_floors.leaky_roof_ceiling.started } | ${ repairs_checklist.walls_ceiling_floors.leaky_roof_ceiling.description } | ${ action_button_html(url_action('repairs_checklist.walls_ceiling_floors.leaky_roof_ceiling.problem', label="Edit")) }  
+  | ${ ":check:" if repairs_checklist.walls_ceiling_floors.carpet.problem == True else "" } | Holes in carpet | ${ repairs_checklist.walls_ceiling_floors.carpet.started } | ${ repairs_checklist.walls_ceiling_floors.carpet.description } | ${ action_button_html(url_action('repairs_checklist.walls_ceiling_floors.carpet.problem', label="Edit")) }  
+  | ${ ":check:" if repairs_checklist.walls_ceiling_floors.tiles_linoleum.problem == True else "" } | Missing/broken tiles or linoleum | ${ repairs_checklist.walls_ceiling_floors.tiles_linoleum.started } | ${ repairs_checklist.walls_ceiling_floors.tiles_linoleum.description } | ${ action_button_html(url_action('repairs_checklist.walls_ceiling_floors.tiles_linoleum.problem', label="Edit")) }  
+  | ${ ":check:" if repairs_checklist.walls_ceiling_floors.other.problem == True else "" } | Other | ${ repairs_checklist.walls_ceiling_floors.other.started } | ${ repairs_checklist.walls_ceiling_floors.other.description } | ${ action_button_html(url_action('repairs_checklist.walls_ceiling_floors.other.problem', label="Edit")) }  
   | | **Furnace** |  |  |
-  | ${ ":check:" if repairs_checklist.furnace.heat.problem == True else "" } | Not enough heat | ${ repairs_checklist.furnace.heat.started } | ${ repairs_checklist.furnace.heat.description } |
-  | ${ ":check:" if repairs_checklist.furnace.gas_leaks.problem == True else "" } | Gas leaks | ${ repairs_checklist.furnace.gas_leaks.started } | ${ repairs_checklist.furnace.gas_leaks.description } |
-  | ${ ":check:" if repairs_checklist.furnace.other.problem == True else "" } | Other | ${ repairs_checklist.furnace.other.started } | ${ repairs_checklist.furnace.other.description } |
+  | ${ ":check:" if repairs_checklist.furnace.heat.problem == True else "" } | Not enough heat | ${ repairs_checklist.furnace.heat.started } | ${ repairs_checklist.furnace.heat.description } | ${ action_button_html(url_action('repairs_checklist.furnace.heat.problem', label="Edit")) }  
+  | ${ ":check:" if repairs_checklist.furnace.gas_leaks.problem == True else "" } | Gas leaks | ${ repairs_checklist.furnace.gas_leaks.started } | ${ repairs_checklist.furnace.gas_leaks.description } | ${ action_button_html(url_action('repairs_checklist.furnace.gas_leaks.problem', label="Edit")) }  
+  | ${ ":check:" if repairs_checklist.furnace.other.problem == True else "" } | Other | ${ repairs_checklist.furnace.other.started } | ${ repairs_checklist.furnace.other.description } | ${ action_button_html(url_action('repairs_checklist.furnace.other.problem', label="Edit")) }  
   | | **Appliances** |  |  |
-  | ${ ":check:" if repairs_checklist.appliances.stove.problem == True else "" } | Broken stove/oven | ${ repairs_checklist.appliances.stove.started } | ${ repairs_checklist.appliances.stove.description } |
-  | ${ ":check:" if repairs_checklist.appliances.refrigerator.problem == True else "" } | Broken refrigerator  | ${ repairs_checklist.appliances.refrigerator.started } | ${ repairs_checklist.appliances.refrigerator.description } |
-  | ${ ":check:" if repairs_checklist.appliances.other.problem == True else "" } | Other | ${ repairs_checklist.appliances.other.started } | ${ repairs_checklist.appliances.other.description } |
+  | ${ ":check:" if repairs_checklist.appliances.stove.problem == True else "" } | Broken stove/oven | ${ repairs_checklist.appliances.stove.started } | ${ repairs_checklist.appliances.stove.description } | ${ action_button_html(url_action('repairs_checklist.appliances.stove.problem', label="Edit")) }  
+  | ${ ":check:" if repairs_checklist.appliances.refrigerator.problem == True else "" } | Broken refrigerator  | ${ repairs_checklist.appliances.refrigerator.started } | ${ repairs_checklist.appliances.refrigerator.description } | ${ action_button_html(url_action('repairs_checklist.appliances.refrigerator.problem', label="Edit")) }  
+  | ${ ":check:" if repairs_checklist.appliances.other.problem == True else "" } | Other | ${ repairs_checklist.appliances.other.started } | ${ repairs_checklist.appliances.other.description } | ${ action_button_html(url_action('repairs_checklist.appliances.other.problem', label="Edit")) }  
   | | **Security / Privacy** |  |  |
-  | ${ ":check:" if repairs_checklist.security.illegal_entries.problem == True else "" } | Illegal entries by landlord | ${ repairs_checklist.security.illegal_entries.started } | ${ repairs_checklist.security.illegal_entries.description } |
-  | ${ ":check:" if repairs_checklist.security.disturbance.problem == True else "" } | Disturbance by other tenants | ${ repairs_checklist.security.disturbance.started } | ${ repairs_checklist.security.disturbance.description } |
-  | ${ ":check:" if repairs_checklist.security.break_ins.problem == True else "" } | Break-ins, vandalism | ${ repairs_checklist.security.break_ins.started } | ${ repairs_checklist.security.break_ins.description } |
-  | ${ ":check:" if repairs_checklist.security.unsecure_doors.problem == True else "" } | Broken or unsecure entry doors | ${ repairs_checklist.security.unsecure_doors.started } | ${ repairs_checklist.security.unsecure_doors.description } |
-  | ${ ":check:" if repairs_checklist.security.other.problem == True else "" } | Other | ${ repairs_checklist.security.other.started } | ${ repairs_checklist.security.other.description } |
+  | ${ ":check:" if repairs_checklist.security.illegal_entries.problem == True else "" } | Illegal entries by landlord | ${ repairs_checklist.security.illegal_entries.started } | ${ repairs_checklist.security.illegal_entries.description } | ${ action_button_html(url_action('repairs_checklist.security.illegal_entries.problem', label="Edit")) }  
+  | ${ ":check:" if repairs_checklist.security.disturbance.problem == True else "" } | Disturbance by other tenants | ${ repairs_checklist.security.disturbance.started } | ${ repairs_checklist.security.disturbance.description } | ${ action_button_html(url_action('repairs_checklist.security.disturbance.problem', label="Edit")) }  
+  | ${ ":check:" if repairs_checklist.security.break_ins.problem == True else "" } | Break-ins, vandalism | ${ repairs_checklist.security.break_ins.started } | ${ repairs_checklist.security.break_ins.description } | ${ action_button_html(url_action('repairs_checklist.security.break_ins.problem', label="Edit")) }  
+  | ${ ":check:" if repairs_checklist.security.unsecure_doors.problem == True else "" } | Broken or unsecure entry doors | ${ repairs_checklist.security.unsecure_doors.started } | ${ repairs_checklist.security.unsecure_doors.description } | ${ action_button_html(url_action('repairs_checklist.security.unsecure_doors.problem', label="Edit")) }  
+  | ${ ":check:" if repairs_checklist.security.other.problem == True else "" } | Other | ${ repairs_checklist.security.other.started } | ${ repairs_checklist.security.other.description } | ${ action_button_html(url_action('repairs_checklist.security.other.problem', label="Edit")) }  
   | | **Other Areas** |  |  |
-  | ${ ":check:" if repairs_checklist.other_areas.yard.problem == True else "" } | Issues with the yard | ${ repairs_checklist.other_areas.yard.started } | ${ repairs_checklist.other_areas.yard.description } |
-  | ${ ":check:" if repairs_checklist.other_areas.trash.problem == True else "" } | Trash from previous tenant | ${ repairs_checklist.other_areas.trash.started } | ${ repairs_checklist.other_areas.trash.description } |
-  | ${ ":check:" if repairs_checklist.other_areas.garage.problem == True else "" } | Problems with garage/storage area | ${ repairs_checklist.other_areas.garage.started } | ${ repairs_checklist.other_areas.garage.description } |
-  | ${ ":check:" if repairs_checklist.other_areas.basement.problem == True else "" } | Leaky basement | ${ repairs_checklist.other_areas.basement.started } | ${ repairs_checklist.other_areas.basement.description } |
-  | ${ ":check:" if repairs_checklist.other_areas.utility_bills.problem == True else "" } | Pay utility bills | ${ repairs_checklist.other_areas.utility_bills.started } | ${ repairs_checklist.other_areas.utility_bills.description } |
-  | ${ ":check:" if repairs_checklist.other_areas.cabinets.problem == True else "" } | Missing/broken cabinets/doors | ${ repairs_checklist.other_areas.cabinets.started } | ${ repairs_checklist.other_areas.cabinets.description } |
+  | ${ ":check:" if repairs_checklist.other_areas.yard.problem == True else "" } | Issues with the yard | ${ repairs_checklist.other_areas.yard.started } | ${ repairs_checklist.other_areas.yard.description } | ${ action_button_html(url_action('repairs_checklist.other_areas.yard.problem', label="Edit")) }  
+  | ${ ":check:" if repairs_checklist.other_areas.trash.problem == True else "" } | Trash from previous tenant | ${ repairs_checklist.other_areas.trash.started } | ${ repairs_checklist.other_areas.trash.description } | ${ action_button_html(url_action('repairs_checklist.other_areas.trash.problem', label="Edit")) }  
+  | ${ ":check:" if repairs_checklist.other_areas.garage.problem == True else "" } | Problems with garage/storage area | ${ repairs_checklist.other_areas.garage.started } | ${ repairs_checklist.other_areas.garage.description } | ${ action_button_html(url_action('repairs_checklist.other_areas.garage.problem', label="Edit")) }  
+  | ${ ":check:" if repairs_checklist.other_areas.basement.problem == True else "" } | Leaky basement | ${ repairs_checklist.other_areas.basement.started } | ${ repairs_checklist.other_areas.basement.description } | ${ action_button_html(url_action('repairs_checklist.other_areas.basement.problem', label="Edit")) }  
+  | ${ ":check:" if repairs_checklist.other_areas.utility_bills.problem == True else "" } | Pay utility bills | ${ repairs_checklist.other_areas.utility_bills.started } | ${ repairs_checklist.other_areas.utility_bills.description } | ${ action_button_html(url_action('repairs_checklist.other_areas.utility_bills.problem', label="Edit")) }  
+  | ${ ":check:" if repairs_checklist.other_areas.cabinets.problem == True else "" } | Missing/broken cabinets/doors | ${ repairs_checklist.other_areas.cabinets.started } | ${ repairs_checklist.other_areas.cabinets.description } | ${ action_button_html(url_action('repairs_checklist.other_areas.cabinets.problem', label="Edit")) }  
   % if repairs_checklist.other_areas.other.there_are_any:
   % for item in repairs_checklist.other_areas.other:
-  | ${ ":check:" if repairs_checklist.other_areas.other.there_are_any == True else "" } | ${ item.problem } | ${ item.started } | ${ item.description } |
+  | ${ ":check:" if repairs_checklist.other_areas.other.there_are_any == True else "" } | ${ item.problem } | ${ item.started } | ${ item.description } | ${ action_button_html(url_action(item.attr_name('problem'), label="Edit")) }
   % endfor
   % endif
-#  | | Other | ${ repairs_checklist.other_areas.other[i].started } | ${ repairs_checklist.other_areas.other[i].description } |
-#  | | **Other** |  |  |
-#  | | ${ repairs_checklist.other_areas.other[i].problem } | ${ repairs_checklist.other_areas.other[i].started } | ${ repairs_checklist.other_areas.other[i].description } |
-  
-#  | :check: | Problem | Start date | Description |
-#  | - | - | - | - |
-#  | | Infestation | | |
-#  | | Mice | ${ repairs_checklist.infestations.mice.started } | ${ repairs_checklist.infestations.mice.description } |
-#  | | Cockroaches | ${ repairs_checklist.infestations.cockroaches.started } | ${ repairs_checklist.infestations.cockroaches.description } |
-#  | | Bedbugs | ${ repairs_checklist.infestations.bedbugs.started } | ${ repairs_checklist.infestations.bedbugs.description } |
-#  | | Other | ${ repairs_checklist.infestations.other.started } | ${ repairs_checklist.infestations.other.description } |
-#  | | Other Areas | | |
-#  % if repairs_checklist.other_areas.other.there_are_any:
-#  % for item in repairs_checklist.other_areas.other:
-#  | | ${ item.problem } | ${ item.started } | ${ item.description } |
-#  % endfor
-#  % endif
-# or 
-#  % for item in repairs_checklist.other_areas.other:
-#  | | ${ item.problem } | ${ item.started } | ${ item.description } |
-#  % endfor
-
-#  | | Problem | Start date | Description
-#  | - | - | - | - |
-#  | | Infestation | | |
-#  % for item in repairs_checklist.infestations.mice:
-#  | | ${ item.problem } | ${ item.started } | ${ item.description } |
-#  % endfor
-#  % for item in repairs_checklist.infestations.cockroaches:
-#  | | ${ item.problem } | ${ item.started } | ${ item.description } |
-#  % endfor
-#  % for item in repairs_checklist.infestations.bedbugs:
-#  | | ${ item.problem } | ${ item.started } | ${ item.description } |
-#  % endfor
-#  % for item in repairs_checklist.infestations.other:
-#  | | ${ item.problem } | ${ item.started } | ${ item.description } |
-#  % endfor
-# or
-#  ${ repairs_checklist.table }
-#  ${ repairs_checklist[i].other_areas.other.table }
 #---
-#field: repairs_checklist.revisit
-#question: |
-#  Edit your reponses
-#subquestion: |
-#  ${ repairs_checklist.table }
+#code: |
+#  # If the form is a letter, it _always_ is addressed to someone.
+#  if al_form_type == 'letter':
+#    other_parties.there_are_any = True
 ---
-sets:
-  - other_parties[i].name.first
-  - other_parties[i].name.last
-  - other_parties[i].name.middle
-  - other_parties[i].name.suffix
-id: names of opposing parties
-question: |
-  % if user_started_case:
-  Name of ${ ordinal(i) } **defendant** or respondent in this
-  matter
-  % else:
-  Name of ${ ordinal(i) } **plaintiff** or petitioner in this matter
-  % endif
-fields:
-  - code: |
-      other_parties[i].name_fields(person_or_business='unsure')
-#---
-#table: repairs_checklist.table
-#rows: repairs_checklist
-#columns:
-#  - Problem: row_item.problem
-#  - When It Started: row_item.started
-#  - Description: row_item.description
-#edit:
-#  - problem
-#  - started
-#  - description
-#show incomplete: True
-#show if empty: True
-#not available label: "none"
-#require gathered: False
-#---
-#table: repairs_checklist[i].other_areas.other.table
-#rows: repairs_checklist[i].other_areas.other
-#columns:
-#  - Problem: row_item.problem
-#  - What it Started: row_item.started
-#  - Description: row_item.description
-#edit:
-#  - problem
-#  - started
-#  - description
-#show incomplete: True
-#show if empty: True
-#not available label: "none"
+code: |
+  other_parties[i].name_fields(person_or_business='unsure')
+  other_parties[i].address.address
+  other_parties[i].complete = True
 ---
-# Table
-table: repairs_checklist.table
-rows: repairs_checklist
-columns:
-  - Problem: row_item.problem
-  - When It Started: row_item.started
-  - Description: row_item.description
-comment: |
-  | | Problem | Start date | Description |
-  | - | - | - | - |
-  | | Infestation | | |
-  % for item in repairs_checklist.infestations:
-  | | ${ mice.problem } | ${ mice.started } | ${ mice.description } |
-  % for item in repairs_checklist.infestations:
-  | | ${ cockroaches.problem } | ${ cockroaches.started } | ${ cockroaches.description } |
-  % for item in repairs_checklist.infestations:
-  | | ${ bedbugs.problem } | ${ bedbugs.started } | ${ bedbugs.description } |
-  % for item in repairs_checklist.infestations:
-  | | ${ other.problem } | ${ other.started } | ${ other.description } |
-  % endfor
-  | | Electrical | | |
-  % for item in repairs_checklist.electrical:
-  | | ${ smoke_detector.problem } | ${ smoke_detector.started } | ${ smoke_detector.description } |
-  % for item in repairs_checklist.electrical:
-  | | ${ wiring.problem } | ${ wiring.started } | ${ wiring.description } |
-  % for item in repairs_checklist.electrical:
-  | | ${ circuits.problem } | ${ circuits.started } | ${ circuits.description } |
-  % for item in repairs_checklist.electrical:
-  | | ${ outlet_covers.problem } | ${ outlet_covers.started } | ${ outlet_covers.description } |
-  % for item in repairs_checklist.electrical:
-  | | ${ other.problem } | ${ other.started } | ${ other.description } |
-  % endfor
-  | | Plumbing | | |
-  % for item in repairs_checklist.plumbing:
-  | | ${ hot_water.problem } | ${ hot_water.started } | ${ hot_water.description } |
-  % for item in repairs_checklist.plumbing:
-  | | ${ clogged_pipes.problem } | ${ clogged_pipes.started } | ${ clogged_pipes.description } |
-  % for item in repairs_checklist.plumbing:
-  | | ${ water_pressure.problem } | ${ water_pressure.started } | ${ water_pressure.description } |
-  % for item in repairs_checklist.plumbing:
-  | | ${ dripping_faucets.problem } | ${ dripping_faucets.started } | ${ dripping_faucets.description } |
-  % for item in repairs_checklist.plumbing:
-  | | ${ leaks.problem } | ${ leaks.started } | ${ leaks.description } |
-  % for item in repairs_checklist.plumbing:
-  | | ${ other.problem } | ${ other.started } | ${ other.description } |
-  % endfor
-  | | Windows | | |
-  % for item in repairs_checklist.windows:
-  | | ${ screens.problem } | ${ screens.started } | ${ screens.description } |
-   % for item in repairs_checklist.windows:
-  | | ${ storm_windows.problem } | ${ storm_windows.started } | ${ storm_windows.description } |
-   % for item in repairs_checklist.windows:
-  | | ${ broken_glass.problem } | ${ broken_glass.started } | ${ broken_glass.description } |
-   % for item in repairs_checklist.windows:
-  | | ${ locks.problem } | ${ locks.started } | ${ locks.description } |
-   % for item in repairs_checklist.windows:
-  | | ${ other.problem } | ${ other.started } | ${ other.description } |
-  % endfor
-  | | Doors | | |
-  % for item in repairs_checklist.doors:
-  | | ${ deadbolt_locks.problem } | ${ deadbolt_locks.started } | ${ deadbolt_locks.description } |
-   % for item in repairs_checklist.doors:
-  | | ${ broken_locks.problem } | ${ broken_locks.started } | ${ broken_locks.description } |
-   % for item in repairs_checklist.doors:
-  | | ${ door_knobs.problem } | ${ door_knobs.started } | ${ door_knobs.description } |
-   % for item in repairs_checklist.doors:
-  | | ${ other.problem } | ${ other.started } | ${ other.description } |
-  % endfor
-  | | Walls / Ceiling / Floors | | |
-  % for item in repairs_checklist.walls_ceiling_floors:
-  | | ${ paint.problem } | ${ paint.started } | ${ paint.description } |
-   % for item in repairs_checklist.walls_ceiling_floors:
-  | | ${ holes.problem } | ${ holes.started } | ${ holes.description } |
-   % for item in repairs_checklist.walls_ceiling_floors:
-  | | ${ leaky_roof_ceiling.problem } | ${ leaky_roof_ceiling.started } | ${ leaky_roof_ceiling.description } |
-   % for item in repairs_checklist.walls_ceiling_floors:
-  | | ${ carpet.problem } | ${ carpet.started } | ${ carpet.description } |
-   % for item in repairs_checklist.walls_ceiling_floors:
-  | | ${ tiles_linoleum.problem } | ${ tiles_linoleum.started } | ${ tiles_linoleum.description } |
-   % for item in repairs_checklist.walls_ceiling_floors:
-  | | ${ other.problem } | ${ other.started } | ${ other.description } |
-  % endfor
-  | | Furnace | | |
-  % for item in repairs_checklist.furnace:
-  | | ${ heat.problem } | ${ heat.started } | ${ heat.description } |
-   % for item in repairs_checklist.furnace:
-  | | ${ gas_leaks.problem } | ${ gas_leaks.started } | ${ gas_leaks.description } |
-   % for item in repairs_checklist.furnace:
-  | | ${ other.problem } | ${ other.started } | ${ other.description } |
-  % endfor
-  | | Appliances | | |
-  % for item in repairs_checklist.appliances:
-  | | ${ stove.problem } | ${ stove.started } | ${ stove.description } |
-   % for item in repairs_checklist.appliances:
-  | | ${ refrigerator.problem } | ${ refrigerator.started } | ${ refrigerator.description } |
-   % for item in repairs_checklist.appliances:
-  | | ${ other.problem } | ${ other.started } | ${ other.description } |
-  % endfor
-  | | Security / Privacy | | |
-  % for item in repairs_checklist.security:
-  | | ${ illegal_entries.problem } | ${ illegal_entries.started } | ${ illegal_entries.description } |
-   % for item in repairs_checklist.security:
-  | | ${ disturbance.problem } | ${ disturbance.started } | ${ disturbance.description } |
-   % for item in repairs_checklist.security:
-  | | ${ break_ins.problem } | ${ break_ins.started } | ${ break_ins.description } |
-   % for item in repairs_checklist.security:
-  | | ${ unsecure_doors.problem } | ${ unsecure_doors.started } | ${ unsecure_doors.description } |
-   % for item in repairs_checklist.security:
-  | | ${ other.problem } | ${ other.started } | ${ other.description } |
-  % endfor
-  | | Other Areas | | |
-  % for item in repairs_checklist.other_areas:
-  | | ${ yard.problem } | ${ yard.started } | ${ yard.description } |
-   % for item in repairs_checklist.other_areas:
-  | | ${ trash.problem } | ${ trash.started } | ${ trash.description } |
-   % for item in repairs_checklist.other_areas:
-  | | ${ garage.problem } | ${ garage.started } | ${ garage.description } |
-   % for item in repairs_checklist.other_areas:
-  | | ${ basement.problem } | ${ basement.started } | ${ basement.description } |
-   % for item in repairs_checklist.other_areas:
-  | | ${ utility_bills.problem } | ${ utility_bills.started } | ${ utility_bills.description } |
-   % for item in repairs_checklist.other_areas:
-  | | ${ cabinets.problem } | ${ cabinets.started } | ${ cabinets.description } |
-   % for item in repairs_checklist.other_areas:
-  | | ${ other.problem } | ${ other.started } | ${ other.description } |
-  % endfor
-  % if has_other_areas:
-  % for other_areas2, other2 in enumberate(repairs_checklist.other_area.others):
-  | other2.problem | other2.started | other2.description |
-  % endfor
-  % endif
-# where the first | | section should contain the checkmark between them. 
----
-# Table
-#comment: |
-#  columns:
-#    - row_item.problem
-#    - row_item.started
-#    - row_item.description
-#---
-# Table
-#comment: |
-#  | Description | Start date |
-#  | - | - |
-#  % for key, item in enumerate(repairs_checklist):
-#  % if key != "other_area_others":
-#  | item.description | item.started |
-#  % endif
-#  % endfor
-#  % if has_other_areas:
-#  % for key2, item2 in enumberate(repairs_checklist.other_area_others):
-#  | item2.description | item2.started |
-#  % endfor
-#  % endif
+code: |
+  users[i].name.first
+  users[i].name.last
+  users[i].name.middle
+  users[i].name.suffix
+  users[i].address.address
+  users[i].complete = True
 ---
 id: preview Request_for_repairs_letter
 question: |
@@ -1452,687 +976,462 @@ continue button field: Request_for_repairs_letter_preview_question
 ---
 code: |
   signature_fields = ['users[0].signature']
+#---
+#id: Request for repairs letter review screen
 ---
-id: Request for repairs letter review screen
-event: review_Request_for_repairs_letter
-question: |
+# generated review screen starts here
+event: |-
+  review_Request_for_repairs_letter
+
+code: |-
+  review_form
+
+---
+# source code starts here
+id: |-
+  review screen
+
+event: |-
+  review_form
+#skip undefined: False
+question: |-
   Review your answers
+
 review:
-  - Edit: plumbing_other
+  - Edit: |-
+      repairs_checklist.revisit
+    button: |-
+      **Repairs Checklist**
+
+      % for item in repairs_checklist:
+      - ${ item }
+      % endfor
+  - Edit: |-
+      repairs_checklist.infestations.mice.problem
     button: |
-      **Other plumbing issues**:
-      ${ word(yesno(plumbing_other)) }
-  - Edit: windows_screens
+      **<b>INFESTATIONS</b>**
+
+      **<b>Mice:</b>** ${ word(yesno(repairs_checklist.infestations.mice.problem)) }
+      
+      When it started: ${ showifdef('repairs_checklist.infestations.mice.started') }
+
+      Description: ${ showifdef('repairs_checklist.infestations.mice.description') }
+
+      **<b>Cockroaches:</b>** ${ word(yesno(repairs_checklist.infestations.cockroaches.problem)) }
+
+      When it started: ${ showifdef('repairs_checklist.infestations.cockroaches.started') }
+
+      Description: ${ showifdef('repairs_checklist.infestations.cockroaches.description') }
+
+      **<b>Bedbugs:</b>** ${ word(yesno(repairs_checklist.infestations.bedbugs.problem)) }
+
+      When it started: ${ showifdef('repairs_checklist.infestations.bedbugs.started') }
+
+      Description: ${ showifdef('repairs_checklist.infestations.bedbugs.description') }
+
+      **<b>Other:</b>** ${ word(yesno(repairs_checklist.infestations.other.problem)) }
+
+      When it started: ${ showifdef('repairs_checklist.infestations.other.started') }
+
+      Description: ${ showifdef('repairs_checklist.infestations.other.description') }
+  - Edit: |-
+      repairs_checklist.electrical.smoke_detector.problem
     button: |
-      **Missing/torn screens**:
-      ${ word(yesno(windows_screens)) }
-  - Edit: windows_storm_windows
+      **<b>ELECTRICAL</b>**
+
+      **<b>No/broken smoke detector:</b>** ${ word(yesno(repairs_checklist.electrical.smoke_detector.problem)) }
+
+      When it started: ${ showifdef('repairs_checklist.electrical.smoke_detector.started') }
+
+      Description: ${ showifdef('repairs_checklist.electrical.smoke_detector.description') }
+
+      **<b>Exposed wiring:</b>** ${ word(yesno(repairs_checklist.electrical.wiring.problem)) }
+
+      When it started: ${ showifdef('repairs_checklist.electrical.wiring.started') }
+
+      Description: ${ showifdef('repairs_checklist.electrical.wiring.description') }
+
+      **<b>Short circuits/faulty electrical:</b>** ${ word(yesno(repairs_checklist.electrical.circuits.problem)) }
+
+      When it started: ${ showifdef('repairs_checklist.electrical.circuits.started') }
+
+      Description: ${ showifdef('repairs_checklist.electrical.circuits.description') }
+
+      **<b>No cover plates on outlets:</b>** ${ word(yesno(repairs_checklist.electrical.outlet_covers.problem)) }
+
+      When it started: ${ showifdef('repairs_checklist.electrical.outlet_covers.started') }
+
+      Description: ${ showifdef('repairs_checklist.electrical.outlet_covers.description') }
+
+      **<b>Other:</b>** ${ word(yesno(repairs_checklist.electrical.other.problem)) }
+
+      When it started: ${ showifdef('repairs_checklist.electrical.other.started') }
+
+      Description: ${ showifdef('repairs_checklist.electrical.other.description') }
+  - Edit: |-
+      repairs_checklist.plumbing.hot_water.problem
     button: |
-      **Missing storm windows**:
-      ${ word(yesno(windows_storm_windows)) }
+      **<b>PLUMBING</b>**
+
+      **<b>No hot water:</b>** ${ word(yesno(repairs_checklist.plumbing.hot_water.problem)) }
+
+      When it started: ${ showifdef('repairs_checklist.plumbing.hot_water.started') }
+
+      Description: ${ showifdef('repairs_checklist.plumbing.hot_water.description') }
+
+      **<b>Clogged pipes/toilet:</b>** ${ word(yesno(repairs_checklist.plumbing.clogged_pipes.problem)) }
+
+      When it started: ${ showifdef('repairs_checklist.plumbing.clogged_pipes.started') }
+
+      Description: ${ showifdef('repairs_checklist.plumbing.clogged_pipes.description') }
+
+      **<b>Bad water pressure:</b>** ${ word(yesno(repairs_checklist.plumbing.water_pressure.problem)) }
+
+      When it started: ${ showifdef('repairs_checklist.plumbing.water_pressure.started') }
+
+      Description: ${ showifdef('repairs_checklist.plumbing.water_pressure.description') }
+
+      **<b>Dripping faucets:</b>** ${ word(yesno(repairs_checklist.plumbing.dripping_faucets.problem)) }
+
+      When it started: ${ showifdef('repairs_checklist.plumbing.dripping_faucets.started') }
+
+      Description: ${ showifdef('repairs_checklist.plumbing.dripping_faucets.description') }
+
+      **<b>Leaks:</b>** ${ word(yesno(repairs_checklist.plumbing.leaks.problem)) }
+
+      When it started: ${ showifdef('repairs_checklist.plumbing.leaks.started') }
+
+      Description: ${ showifdef('repairs_checklist.plumbing.leaks.description') }
+
+      **<b>Other:</b>** ${ word(yesno(repairs_checklist.plumbing.other.problem)) }
+
+      When it started: ${ showifdef('repairs_checklist.plumbing.other.started') }
+
+      Description: ${ showifdef('repairs_checklist.plumbing.other.description') }
+  - Edit: |-
+      repairs_checklist.windows.screens.problem
+    button: |
+      **<b>WINDOWS</b>**
+
+      **<b>Missing/torn screens:</b>** ${ word(yesno(repairs_checklist.windows.screens.problem)) }
+
+      When it started: ${ showifdef('repairs_checklist.windows.screens.started') }
+
+      Description: ${ showifdef('repairs_checklist.windows.screens.description') }
+
+      **<b>Missing storm windows:</b>** ${ word(yesno(repairs_checklist.windows.storm_windows.problem)) }
+
+      When it started: ${ showifdef('repairs_checklist.windows.storm_windows.started') }
+
+      Description: ${ showifdef('repairs_checklist.windows.storm_windows.description') }
+
+      **<b>Broken/cracked glass:</b>** ${ word(yesno(repairs_checklist.windows.broken_glass.problem)) }
+
+      When it started: ${ showifdef('repairs_checklist.windows.broken_glass.started') }
+
+      Description: ${ showifdef('repairs_checklist.windows.broken_glass.description') }
+
+      **<b>Missing/broken window locks:</b>** ${ word(yesno(repairs_checklist.windows.locks.problem)) }
+
+      When it started: ${ showifdef('repairs_checklist.windows.locks.started') }
+
+      Description: ${ showifdef('repairs_checklist.windows.locks.description') }
+
+      **<b>Other:</b>** ${ word(yesno(repairs_checklist.windows.other.problem)) }
+
+      When it started: ${ showifdef('repairs_checklist.windows.other.started') }
+
+      Description: ${ showifdef('repairs_checklist.windows.other.description') }
+  - Edit: |-
+      repairs_checklist.doors.deadbolt_locks.problem
+    button: |
+      **<b>DOORS</b>**
+
+      **<b>No deadbolt locks:</b>** ${ word(yesno(repairs_checklist.doors.deadbolt_locks.problem)) }
+
+      When it started: ${ showifdef('repairs_checklist.doors.deadbolt_locks.started') }
+
+      Description: ${ showifdef('repairs_checklist.doors.deadbolt_locks.description') }
+
+      **<b>Broken door locks:</b>** ${ word(yesno(repairs_checklist.doors.broken_locks.problem)) }
+
+      When it started: ${ showifdef('repairs_checklist.doors.broken_locks.started') }
+
+      Description: ${ showifdef('repairs_checklist.doors.broken_locks.description') }
+
+      **<b>Missing/broken door knobs:</b>** ${ word(yesno(repairs_checklist.doors.door_knobs.problem)) }
+
+      When it started: ${ showifdef('repairs_checklist.doors.door_knobs.started') }
+
+      Description: ${ showifdef('repairs_checklist.doors.door_knobs.description') }
+
+      **<b>Other:</b>** ${ word(yesno(repairs_checklist.doors.other.problem)) }
+
+      When it started: ${ showifdef('repairs_checklist.doors.other.started') }
+
+      Description: ${ showifdef('repairs_checklist.doors.other.description') }
+  - Edit: |-
+      repairs_checklist.walls_ceiling_floors.paint.problem
+    button: |
+      **<b>WALLS / CEILING / FLOORS</b>**
+
+      **<b>Chipped/flaking paint:</b>** ${ word(yesno(repairs_checklist.walls_ceiling_floors.paint.problem)) }
+
+      When it started: ${ showifdef('repairs_checklist.walls_ceiling_floors.paint.started') }
+
+      Description: ${ showifdef('repairs_checklist.walls_ceiling_floors.paint.description') }
+
+      **<b>Holes or cracks in walls:</b>** ${ word(yesno(repairs_checklist.walls_ceiling_floors.holes.problem)) }
+
+      When it started: ${ showifdef('repairs_checklist.walls_ceiling_floors.holes.started') }
+
+      Description: ${ showifdef('repairs_checklist.walls_ceiling_floors.holes.description') }
+
+      **<b>Leaky roof or ceiling:</b>** ${ word(yesno(repairs_checklist.walls_ceiling_floors.leaky_roof_ceiling.problem)) }
+
+      When it started: ${ showifdef('repairs_checklist.walls_ceiling_floors.leaky_roof_ceiling.started') }
+
+      Description: ${ showifdef('repairs_checklist.walls_ceiling_floors.leaky_roof_ceiling.description') }
+
+      **<b>Holes in carpet:</b>** ${ word(yesno(repairs_checklist.walls_ceiling_floors.carpet.problem)) }
+
+      When it started: ${ showifdef('repairs_checklist.walls_ceiling_floors.carpet.started') }
+
+      Description: ${ showifdef('repairs_checklist.walls_ceiling_floors.carpet.description') }
+
+      **<b>Missing/broken tiles or linoleum:</b>** ${ word(yesno(repairs_checklist.walls_ceiling_floors.tiles_linoleum.problem)) }
+
+      When it started: ${ showifdef('repairs_checklist.walls_ceiling_floors.tiles_linoleum.started') }
+
+      Description: ${ showifdef('repairs_checklist.walls_ceiling_floors.tiles_linoleum.description') }
+
+      **<b>Other:</b>** ${ word(yesno(repairs_checklist.walls_ceiling_floors.other.problem)) }
+
+      When it started: ${ showifdef('repairs_checklist.walls_ceiling_floors.other.started') }
+
+      Description: ${ showifdef('repairs_checklist.walls_ceiling_floors.other.description') }
+  - Edit: |-
+      repairs_checklist.furnace.heat.problem
+    button: |
+      **<b>FURNACE</b>**
+
+      **<b>Not enough heat:</b>** ${ word(yesno(repairs_checklist.furnace.heat.problem)) }
+
+      When it started: ${ showifdef('repairs_checklist.furnace.heat.started') }
+
+      Description: ${ showifdef('repairs_checklist.furnace.heat.description') }
+
+      **<b>Gas leaks:</b>** ${ word(yesno(repairs_checklist.furnace.gas_leaks.problem)) }
+
+      When it started: ${ showifdef('repairs_checklist.furnace.gas_leaks.started') }
+
+      Description: ${ showifdef('repairs_checklist.furnace.gas_leaks.description') }
+
+      **<b>Other:</b>** ${ word(yesno(repairs_checklist.furnace.other.problem)) }
+
+      When it started: ${ showifdef('repairs_checklist.furnace.other.started') }
+
+      Description: ${ showifdef('repairs_checklist.furnace.other.description') }
+  - Edit: |-
+      repairs_checklist.appliances.stove.problem
+    button: |
+      **<b>APPLIANCES</b>**
+
+      **<b>Broken stove/oven:</b>** ${ word(yesno(repairs_checklist.appliances.stove.problem)) }
+
+      When it started: ${ showifdef('repairs_checklist.appliances.stove.started') }
+
+      Description: ${ showifdef('repairs_checklist.appliances.stove.description') }
+
+      **<b>Broken refrigerator:</b>** ${ word(yesno(repairs_checklist.appliances.refrigerator.problem)) }
+
+      When it started: ${ showifdef('repairs_checklist.appliances.refrigerator.started') }
+
+      Description: ${ showifdef('repairs_checklist.appliances.refrigerator.description') }
+
+      **<b>Other:</b>** ${ word(yesno(repairs_checklist.appliances.other.problem)) }
+
+      When it started: ${ showifdef('repairs_checklist.appliances.other.started') }
+
+      Description: ${ showifdef('repairs_checklist.appliances.other.description') }
+  - Edit: |-
+      repairs_checklist.security.illegal_entries.problem
+    button: |
+      **<b>SECURITY / PRIVACY</b>**
+
+      **<b>Illegal entries by landlord:</b>** ${ word(yesno(repairs_checklist.security.illegal_entries.problem)) }
+
+      When it started: ${ showifdef('repairs_checklist.security.illegal_entries.started') }
+
+      Description: ${ showifdef('repairs_checklist.security.illegal_entries.description') }
+
+      **<b>Disturbance by other tenants:</b>** ${ word(yesno(repairs_checklist.security.disturbance.problem)) }
+
+      When it started: ${ showifdef('repairs_checklist.security.disturbance.started') }
+
+      Description: ${ showifdef('repairs_checklist.security.disturbance.description') }
+
+      **<b>Break-ins, vandalism:</b>** ${ word(yesno(repairs_checklist.security.break_ins.problem)) }
+
+      When it started: ${ showifdef('repairs_checklist.security.break_ins.started') }
+
+      Description: ${ showifdef('repairs_checklist.security.break_ins.description') }
+
+      **<b>Broken or unsecure entry doors:</b>** ${ word(yesno(repairs_checklist.security.unsecure_doors.problem)) }
+
+      When it started: ${ showifdef('repairs_checklist.security.unsecure_doors.started') }
+
+      Description: ${ showifdef('repairs_checklist.security.unsecure_doors.description') }
+
+      **<b>Other:</b>** ${ word(yesno(repairs_checklist.security.other.problem)) }
+
+      When it started: ${ showifdef('repairs_checklist.security.other.started') }
+
+      Description: ${ showifdef('repairs_checklist.security.other.description') }
+  - Edit: |-
+      repairs_checklist.other_areas.yard.problem
+    button: |
+      **<b>OTHER AREAS</b>**
+
+      **<b>Issues with the yard:</b>** ${ word(yesno(repairs_checklist.other_areas.yard.problem)) }
+
+      When it started: ${ showifdef('repairs_checklist.other_areas.yard.started') }
+
+      Description: ${ showifdef('repairs_checklist.other_areas.yard.description') }
+
+      **<b>Trash from previous tenant:</b>** ${ word(yesno(repairs_checklist.other_areas.trash.problem)) }
+
+      When it started: ${ showifdef('repairs_checklist.other_areas.trash.started') }
+
+      Description: ${ showifdef('repairs_checklist.other_areas.trash.description') }
+
+      **<b>Problems with garage/storage areas:</b>** ${ word(yesno(repairs_checklist.other_areas.garage.problem)) }
+
+      When it started: ${ showifdef('repairs_checklist.other_areas.garage.started') }
+
+      Description: ${ showifdef('repairs_checklist.other_areas.garage.description') }
+
+      **<b>Leaky basement:</b>** ${ word(yesno(repairs_checklist.other_areas.basement.problem)) }
+
+      When it started: ${ showifdef('repairs_checklist.other_areas.basement.started') }
+
+      Description: ${ showifdef('repairs_checklist.other_areas.basement.description') }
+
+      **<b>Pay utility bills:</b>** ${ word(yesno(repairs_checklist.other_areas.utility_bills.problem)) }
+
+      When it started: ${ showifdef('repairs_checklist.other_areas.utility_bills.started') }
+
+      Description: ${ showifdef('repairs_checklist.other_areas.utility_bills.description') }
+
+      **<b>Missing/broken cabinets/doors:</b>** ${ word(yesno(repairs_checklist.other_areas.cabinets.problem)) }
+
+      When it started: ${ showifdef('repairs_checklist.other_areas.cabinets.started') }
+
+      Description: ${ showifdef('repairs_checklist.other_areas.cabinets.description') }
+
+      **<b>Other:</b>** ${ word(yesno(repairs_checklist.other_areas.other.there_are_any)) }
+      
+      When it started: ${ showifdef('repairs_checklist.other_areas.other.started') }
+
+      Description: ${ showifdef('repairs_checklist.other_areas.other.description') }
+
+#this section doesn't seem to be doing anything; it's not showing  my additional items.. It's also showing that I said I don't have any other problems when I had added 2 'other' issues.
+  - Edit: |-
+      repairs_checklist.other_areas.other.there_is_another
+    button: |
+      **What is your ${ ordinal(i) } other problem?**
+
+      Other repair issues?: ${ word(yesno(repairs_checklist.other_areas.other.there_is_another)) }
+  
   - Edit: other_parties.revisit
     button: |
-      **Other parties**
+      **Opposing Parties**
 
-      % for item in other_parties:
-        * ${ item }
+      % for y in other_parties:
+        * ${ y }
       % endfor
-  - Edit: windows_broken_glass
-    button: |
-      **Broken/cracked glass**:
-      ${ word(yesno(windows_broken_glass)) }
-  - Edit: windows_locks
-    button: |
-      **Missing/broken window locks**:
-      ${ word(yesno(windows_locks)) }
-  - Edit: windows_other
-    button: |
-      **Other windows issues**:
-      ${ word(yesno(windows_other)) }
-  - Edit: doors_deadbolt_locks
-    button: |
-      **No deadbolt locks**:
-      ${ word(yesno(doors_deadbolt_locks)) }
-  - Edit: doors_broken_locks
-    button: |
-      **Broken door locks**:
-      ${ word(yesno(doors_broken_locks)) }
+  
   - Edit: users.revisit
     button: |
-      **Users**
+      **Users creating this form**
 
-      % for item in users:
-        * ${ item }
+      % for y in users:
+        * ${ y }
       % endfor
-  - Edit: doors_door_knobs
-    button: |
-      **Missing/broken door knobs**:
-      ${ word(yesno(doors_door_knobs)) }
-  - Edit: doors_other
-    button: |
-      **Other door issues**:
-      ${ word(yesno(doors_other)) }
-  - Edit: walls_ceiling_floors_paint
-    button: |
-      **Chipped/flaking paint**:
-      ${ word(yesno(walls_ceiling_floors_paint)) }
-  - Edit: walls_ceiling_floors_holes
-    button: |
-      **Holes or cracks in walls**:
-      ${ word(yesno(walls_ceiling_floors_holes)) }
-  - Edit: walls_ceiling_floors_leaky_roof_ceiling
-    button: |
-      **Leaky roof or ceiling**:
-      ${ word(yesno(walls_ceiling_floors_leaky_roof_ceiling)) }
-  - Edit: walls_ceiling_floors_carpet
-    button: |
-      **Holes in carpet**:
-      ${ word(yesno(walls_ceiling_floors_carpet)) }
-  - Edit: walls_ceiling_floors_tiles_linoleum
-    button: |
-      **Missing/broken tiles or linoleum**:
-      ${ word(yesno(walls_ceiling_floors_tiles_linoleum)) }
-  - Edit: walls_ceiling_floors_other
-    button: |
-      **Other wall/ceiling/floor issues**:
-      ${ word(yesno(walls_ceiling_floors_other)) }
-  - Edit: furnace_heat
-    button: |
-      **Not enough heat**:
-      ${ word(yesno(furnace_heat)) }
-  - Edit: furnace_gas_leaks
-    button: |
-      **Gas leaks**:
-      ${ word(yesno(furnace_gas_leaks)) }
-  - Edit: furnace_other
-    button: |
-      **Other furnace issues**:
-      ${ word(yesno(furnace_other)) }
-  - Edit: appliances_stove
-    button: |
-      **Broken stove/oven**:
-      ${ word(yesno(appliances_stove)) }
-  - Edit: appliances_refrigerator
-    button: |
-      **Broken refrigerator**:
-      ${ word(yesno(appliances_refrigerator)) }
-  - Edit: appliances_other
-    button: |
-      **Other appliances issues**:
-      ${ word(yesno(appliances_other)) }
-  - Edit: security_illegal_entries
-    button: |
-      **Illegal entries by landlord**:
-      ${ word(yesno(security_illegal_entries)) }
-  - Edit: security_disturbance
-    button: |
-      **Disturbance by other tenants**:
-      ${ word(yesno(security_disturbance)) }
-  - Edit: security_break_ins
-    button: |
-      **Break-ins, vandalism**:
-      ${ word(yesno(security_break_ins)) }
-  - Edit: infestations_mice
-    button: |
-      **Mice**:
-      ${ word(yesno(infestations_mice)) }
-  - Edit: infestations_started_mice
-    button: |
-      **Mice infestation started**:
-      ${ infestations_started_mice }
-  - Edit: infestations_description_mice
-    button: |
-      **Mice infestation description**:
-      ${ infestations_description_mice }
-  - Edit: infestations_cockroaches
-    button: |
-      **Cockroaches**:
-      ${ word(yesno(infestations_cockroaches)) }
-  - Edit: infestations_started_cockroaches
-    button: |
-      **Cockroach infestation started**:
-      ${ infestations_started_cockroaches }
-  - Edit: infestations_description_cockroaches
-    button: |
-      **Cockroach infestation description**:
-      ${ infestations_description_cockroaches }
-  - Edit: security_unsecure_doors
-    button: |
-      **Broken or unsecure entry doors**:
-      ${ word(yesno(security_unsecure_doors)) }
-  - Edit: infestations_bedbugs
-    button: |
-      **Bedbugs**:
-      ${ word(yesno(infestations_bedbugs)) }
-  - Edit: infestations_started_bedbugs
-    button: |
-      **Bed bugs infestation started**:
-      ${ infestations_started_bedbugs }
-  - Edit: infestations_description_bedbugs
-    button: |
-      **Bed bugs infestations description**:
-      ${ infestations_description_bedbugs }
-  - Edit: security_other
-    button: |
-      **Other security/privacy issues**:
-      ${ word(yesno(security_other)) }
-  - Edit: infestations_other
-    button: |
-      **Other infestation issues**:
-      ${ word(yesno(infestations_other)) }
-  - Edit: infestations_started_other
-    button: |
-      **Other infestations started**:
-      ${ infestations_started_other }
-  - Edit: infestations_description_other
-    button: |
-      **Other infestations description**:
-      ${ infestations_description_other }
-  - Edit: other_areas_yard
-    button: |
-      **Issues with the yard**:
-      ${ word(yesno(other_areas_yard)) }
-  - Edit: electrical_smoke_detector
-    button: |
-      **No/broken smoke detector**:
-      ${ word(yesno(electrical_smoke_detector)) }
-  - Edit: electrical_started_smoke_detector
-    button: |
-      **Smoke detector issues started**:
-      ${ electrical_started_smoke_detector }
-  - Edit: electrical_description_smoke_detector
-    button: |
-      **Smoke detector issues description**:
-      ${ electrical_description_smoke_detector }
-  - Edit: other_areas_trash
-    button: |
-      **Trash from previous tenant**:
-      ${ word(yesno(other_areas_trash)) }
-  - Edit: electrical_wiring
-    button: |
-      **Exposed wiring**:
-      ${ word(yesno(electrical_wiring)) }
-  - Edit: electrical_started_wiring
-    button: |
-      **Wiring issues started**:
-      ${ electrical_started_wiring }
-  - Edit: electrical_description_wiring
-    button: |
-      **Wiring issues description**:
-      ${ electrical_description_wiring }
-  - Edit: other_areas_garage
-    button: |
-      **Problems with garage/storage areas**:
-      ${ word(yesno(other_areas_garage)) }
-  - Edit: electrical_circuits
-    button: |
-      **Short circuits/faulty electrical**:
-      ${ word(yesno(electrical_circuits)) }
-  - Edit: electrical_started_circuits
-    button: |
-      **Short circuits/faulty electrical started**:
-      ${ electrical_started_circuits }
-  - Edit: electrical_description_circuits
-    button: |
-      **Short circuits/faulty electrical description**:
-      ${ electrical_description_circuits }
-  - Edit: electrical_outlet_covers
-    button: |
-      **No cover plates on outlets**:
-      ${ word(yesno(electrical_outlet_covers)) }
-  - Edit: other_areas_basement
-    button: |
-      **Leaky basement**:
-      ${ word(yesno(other_areas_basement)) }
-  - Edit: electrical_started_outlet_covers
-    button: |
-      **Outlet covers issues started**:
-      ${ electrical_started_outlet_covers }
-  - Edit: electrical_description_outlet_covers
-    button: |
-      **Outlet covers issues description**:
-      ${ electrical_description_outlet_covers }
-  - Edit: electrical_other
-    button: |
-      **Other electrical issues**:
-      ${ word(yesno(electrical_other)) }
-  - Edit: other_areas_utility_bills
-    button: |
-      **Pay utility bills**:
-      ${ word(yesno(other_areas_utility_bills)) }
-  - Edit: electrical_started_other
-    button: |
-      **Other electrical issues started**:
-      ${ electrical_started_other }
-  - Edit: electrical_description_other
-    button: |
-      **Other electrical issues description**:
-      ${ electrical_description_other }
-  - Edit: other_areas_cabinets
-    button: |
-      **Missing/broken cabinets/doors**:
-      ${ word(yesno(other_areas_cabinets)) }
-  - Edit: plumbing_hot_water
-    button: |
-      **No hot water**:
-      ${ word(yesno(plumbing_hot_water)) }
-  - Edit: plumbing_started_hot_water
-    button: |
-      **Hot water issues started**:
-      ${ plumbing_started_hot_water }
-  - Edit: plumbing_description_hot_water
-    button: |
-      **Hot water issues description**:
-      ${ plumbing_description_hot_water }
-  - Edit: plumbing_clogged_pipes
-    button: |
-      **Clogged pipes/toilet**:
-      ${ word(yesno(plumbing_clogged_pipes)) }
-  - Edit: plumbing_started_clogged_pipes
-    button: |
-      **Clogged pipes/toilet started**:
-      ${ plumbing_started_clogged_pipes }
-  - Edit: plumbing_description_clogged_pipes
-    button: |
-      **Clogged pipes/toilet description**:
-      ${ plumbing_description_clogged_pipes }
-  - Edit: plumbing_water_pressure
-    button: |
-      **Bad water pressure**:
-      ${ word(yesno(plumbing_water_pressure)) }
-  - Edit: plumbing_started_water_pressure
-    button: |
-      **Bad water pressure started**:
-      ${ plumbing_started_water_pressure }
-  - Edit: plumbing_description_water_pressure
-    button: |
-      **Bad water pressure description**:
-      ${ plumbing_description_water_pressure }
-  - Edit: plumbing_dripping_faucets
-    button: |
-      **Dripping faucets**:
-      ${ word(yesno(plumbing_dripping_faucets)) }
-  - Edit: plumbing_started_dripping_faucets
-    button: |
-      **Dripping faucets started**:
-      ${ plumbing_started_dripping_faucets }
-  - Edit: plumbing_description_dripping_faucets
-    button: |
-      **Dripping faucets description**:
-      ${ plumbing_description_dripping_faucets }
-  - Edit: plumbing_leaks
-    button: |
-      **Leaks**:
-      ${ word(yesno(plumbing_leaks)) }
-  - Edit: plumbing_started_leaks
-    button: |
-      **Leaks started**:
-      ${ plumbing_started_leaks }
-  - Edit: plumbing_description_leaks
-    button: |
-      **Leaks description**:
-      ${ plumbing_description_leaks }
-  - Edit: plumbing_started_other
-    button: |
-      **Other plumbing issues started**:
-      ${ plumbing_started_other }
-  - Edit: plumbing_description_other
-    button: |
-      **Other plumbing issues description**:
-      ${ plumbing_description_other }
-  - Edit: windows_started_screens
-    button: |
-      **Missing/torn screens started**:
-      ${ windows_started_screens }
-  - Edit: windows_description_screens
-    button: |
-      **Missing/torn screens description**:
-      ${ windows_description_screens }
-  - Edit: windows_started_storm_windows
-    button: |
-      **Missing storm windows started**:
-      ${ windows_started_storm_windows }
-  - Edit: windows_description_storm_windows
-    button: |
-      **Missing storm windows description**:
-      ${ windows_description_storm_windows }
-  - Edit: windows_started_broken_glass
-    button: |
-      **Broken/cracked glass started**:
-      ${ windows_started_broken_glass }
-  - Edit: windows_description_broken_glass
-    button: |
-      **Broken/cracked glass description**:
-      ${ windows_description_broken_glass }
-  - Edit: windows_started_locks
-    button: |
-      **Missing/broken window locks started**:
-      ${ windows_started_locks }
-  - Edit: windows_description_locks
-    button: |
-      **Missing/broken window locks description**:
-      ${ windows_description_locks }
-  - Edit: windows_started_other
-    button: |
-      **Other window issues started**:
-      ${ windows_started_other }
-  - Edit: windows_description_other
-    button: |
-      **Other window issues description**:
-      ${ windows_description_other }
-  - Edit: doors_started_deadbolt_locks
-    button: |
-      **No deadbolt locks**:
-      ${ doors_started_deadbolt_locks }
-  - Edit: doors_description_deadbolt_locks
-    button: |
-      **No deadbolt locks description**:
-      ${ doors_description_deadbolt_locks }
-  - Edit: doors_started_broken_locks
-    button: |
-      **Broken door locks started**:
-      ${ doors_started_broken_locks }
-  - Edit: doors_description_broken_locks
-    button: |
-      **Broken door locks description**:
-      ${ doors_description_broken_locks }
-  - Edit: doors_started_door_knobs
-    button: |
-      **Missing/broken door knobs started**:
-      ${ doors_started_door_knobs }
-  - Edit: doors_description_door_knobs
-    button: |
-      **Missing/broken door knobs description**:
-      ${ doors_description_door_knobs }
-  - Edit: doors_started_other
-    button: |
-      **Other door issues started**:
-      ${ doors_started_other }
-  - Edit: doors_description_other
-    button: |
-      **Other door issues description**:
-      ${ doors_description_other }
-  - Edit: walls_ceiling_floors_started_paint
-    button: |
-      **Chipped/flaking paint started**:
-      ${ walls_ceiling_floors_started_paint }
-  - Edit: walls_ceiling_floors_description_paint
-    button: |
-      **Chipped/flaking paint description**:
-      ${ walls_ceiling_floors_description_paint }
-  - Edit: walls_ceiling_floors_started_holes
-    button: |
-      **Holes or cracks in walls started**:
-      ${ walls_ceiling_floors_started_holes }
-  - Edit: walls_ceiling_floors_description_holes
-    button: |
-      **Holes or cracks in walls description**:
-      ${ walls_ceiling_floors_description_holes }
-  - Edit: walls_ceiling_floors_started_leaky_roof_ceiling
-    button: |
-      **Leaky roof or ceiling started**:
-      ${ walls_ceiling_floors_started_leaky_roof_ceiling }
-  - Edit: walls_ceiling_floors_description_leaky_roof_ceiling
-    button: |
-      **leaky roof or ceiling description**:
-      ${ walls_ceiling_floors_description_leaky_roof_ceiling }
-  - Edit: walls_ceiling_floors_started_carpet
-    button: |
-      **Holes in carpet started**:
-      ${ walls_ceiling_floors_started_carpet }
-  - Edit: walls_ceiling_floors_description_carpet
-    button: |
-      **Holes in carpet description**:
-      ${ walls_ceiling_floors_description_carpet }
-  - Edit: walls_ceiling_floors_started_tiles_linoleum
-    button: |
-      **Missing/broken tiles or linoleum started**:
-      ${ walls_ceiling_floors_started_tiles_linoleum }
-  - Edit: walls_ceiling_floors_description_tiles_linoleum
-    button: |
-      **Missing/broken tiles or linoleum description**:
-      ${ walls_ceiling_floors_description_tiles_linoleum }
-  - Edit: walls_ceiling_floors_started_other
-    button: |
-      **Other wall/ceiling/floor issues started**:
-      ${ walls_ceiling_floors_started_other }
-  - Edit: walls_ceiling_floors_description_other
-    button: |
-      **Other wall/ceiling/floor issues description**:
-      ${ walls_ceiling_floors_description_other }
-  - Edit: furnace_started_heat
-    button: |
-      **Not enough heat started**:
-      ${ furnace_started_heat }
-  - Edit: furnace_description_heat
-    button: |
-      **Not enough heat description**:
-      ${ furnace_description_heat }
-  - Edit: furnace_started_gas_leaks
-    button: |
-      **Gas leaks started**:
-      ${ furnace_started_gas_leaks }
-  - Edit: furnace_description_gas_leaks
-    button: |
-      **Gas leaks description**:
-      ${ furnace_description_gas_leaks }
-  - Edit: furnace_started_other
-    button: |
-      **Other furnace issues started**:
-      ${ furnace_started_other }
-  - Edit: furnace_description_other
-    button: |
-      **Other furnace issues description**:
-      ${ furnace_description_other }
-  - Edit: appliances_started_stove
-    button: |
-      **Broken stove/oven started**:
-      ${ appliances_started_stove }
-  - Edit: appliances_description_stove
-    button: |
-      **Broken stove/oven description**:
-      ${ appliances_description_stove }
-  - Edit: appliances_started_refrigerator
-    button: |
-      **Broken refrigerator started**:
-      ${ appliances_started_refrigerator }
-  - Edit: appliances_description_refrigerator
-    button: |
-      **Broken refrigerator description**:
-      ${ appliances_description_refrigerator }
-  - Edit: appliances_started_other
-    button: |
-      **Other appliance issues started**:
-      ${ appliances_started_other }
-  - Edit: appliances_description_other
-    button: |
-      **Other appliance issues description**:
-      ${ appliances_description_other }
-  - Edit: security_started_illegal_entries
-    button: |
-      **Illegal entries by landlord started**:
-      ${ security_started_illegal_entries }
-  - Edit: security_description_illegal_entries
-    button: |
-      **Illegal entries by landlord description**:
-      ${ security_description_illegal_entries }
-  - Edit: security_started_disturbance
-    button: |
-      **Disturbance by other tenants started**:
-      ${ security_started_disturbance }
-  - Edit: security_description_disturbance
-    button: |
-      **Disturbance by other tenants description**:
-      ${ security_description_disturbance }
-  - Edit: security_started_break_ins
-    button: |
-      **Break-ins, vandalism started**:
-      ${ security_started_break_ins }
-  - Edit: security_description_break_ins
-    button: |
-      **Break-ins, vandalism description**:
-      ${ security_description_break_ins }
-  - Edit: security_started_unsecure_doors
-    button: |
-      **Broken or unsecure entry doors started**:
-      ${ security_started_unsecure_doors }
-  - Edit: security_description_unsecure_doors
-    button: |
-      **Broken or unsecure entry doors description**:
-      ${ security_description_unsecure_doors }
-  - Edit: security_started_other
-    button: |
-      **Other security/privacy issues started**:
-      ${ security_started_other }
-  - Edit: security_description_other
-    button: |
-      **Other security/privacy issues description**:
-      ${ security_description_other }
-  - Edit: other_areas_started_yard
-    button: |
-      **Issues with the yard started**:
-      ${ other_areas_started_yard }
-  - Edit: other_areas_description_yard
-    button: |
-      **Issues with the yard description**:
-      ${ other_areas_description_yard }
-  - Edit: other_areas_started_trash
-    button: |
-      **Trash from previous tenant started**:
-      ${ other_areas_started_trash }
-  - Edit: other_areas_description_trash
-    button: |
-      **Trash from previous tenant description**:
-      ${ other_areas_description_trash }
-  - Edit: other_areas_started_garage
-    button: |
-      **Problems with garage/storage area started**:
-      ${ other_areas_started_garage }
-  - Edit: other_areas_description_garage
-    button: |
-      **Problems with garage/storage area description**:
-      ${ other_areas_description_garage }
-  - Edit: other_areas_started_basement
-    button: |
-      **Leaky basement started**:
-      ${ other_areas_started_basement }
-  - Edit: other_areas_description_basement
-    button: |
-      **Leaky basement description**:
-      ${ other_areas_description_basement }
-  - Edit: other_areas_started_utility_bills
-    button: |
-      **Utility bills payment issues started**:
-      ${ other_areas_started_utility_bills }
-  - Edit: other_areas_description_utility_bills
-    button: |
-      **Utility bills payment issues description**:
-      ${ other_areas_description_utility_bills }
-  - Edit: other_areas_started_cabinets
-    button: |
-      **Missing/broken cabinets/doors started**:
-      ${ other_areas_started_cabinets }
-  - Edit: other_areas_description_cabinets
-    button: |
-      **Missing/broken cabinets/doors description**:
-      ${ other_areas_description_cabinets }
-  - Edit: other_problem_1
-    button: |
-      **Other problem**:
-      ${ other_problem_1 }
-  - Edit: other_areas_started_other_1
-    button: |
-      **Other problem started**:
-      ${ other_areas_started_other_1 }
-  - Edit: other_areas_description_other_1
-    button: |
-      **Other problem description**:
-      ${ other_areas_description_other_1 }
-  - Edit: other_problem_2
-    button: |
-      **Other problem**:
-      ${ other_problem_2 }
-  - Edit: other_areas_started_other_2
-    button: |
-      **Other problem started**:
-      ${ other_areas_started_other_2 }
-  - Edit: other_areas_description_other_2
-    button: |
-      **Other problem description**:
-      ${ other_areas_description_other_2 }
-  - Edit: other_problem_3
-    button: |
-      **Other problem**:
-      ${ other_problem_3 }
-  - Edit: other_areas_started_other_3
-    button: |
-      **Other problem started**:
-      ${ other_areas_started_other_3 }
-  - Edit: other_areas_description_other_3
-    button: |
-      **Other problem description**:
-      ${ other_areas_description_other_3 }
-  - Edit: other_problem_4
-    button: |
-      **Other problem**:
-      ${ other_problem_4 }
-  - Edit: other_areas_started_other_4
-    button: |
-      **Other problem started**:
-      ${ other_areas_started_other_4 }
-  - Edit: other_areas_description_other_4
-    button: |
-      **Other problem description**:
-      ${ other_areas_description_other_4 }
-  - Edit: signature_date
-    button: |
-      **Date of signature**:
-      ${ signature_date }
----
-continue button field: other_parties.revisit
-question: |
-  Edit other_parties
-subquestion: |
-  ${ other_parties.table }
 
-  ${ other_parties.add_action() }
----
-table: other_parties.table
-rows: other_parties
-columns:
-  - Name: |
-      row_item.name.full() if defined("row_item.name.first") else ""
-  - Address: |
-      row_item.address.block() if defined("row_item.address.address") else ""
-edit:
-  - name.first
-  - address.address
-confirm: True
+#tabular: table table-striped
+#---
+
+
+#Might need this for fixing the multiple other issues
+#id: |-
+#  revisit repairs_checklist.other_areas.other
+
+#continue button field: |-
+#  repairs_checklist.other_areas.other.revisit
+
+#question: |-
+#  Edit your answers about Repairs Checklist.Other Areas.Other
+
+#subquestion: |-
+#  ${ repairs_checklist.other_areas.other.table }
+
+#  ${ repairs_checklist.other_areas.other.add_action() }
 
 ---
-continue button field: users.revisit
-question: |
-  Edit users
-subquestion: |
-  ${ users.table }
-
-  ${ users.add_action() }
----
-table: users.table
-rows: users
-columns:
-  - Name: |
-      row_item.name.full() if defined("row_item.name.first") else ""
-  - Address: |
-      row_item.address.block() if defined("row_item.address.address") else ""
-  - Signature: |
-      row_item.signature if defined("row_item.signature") else ""
-edit:
-  - name.first
-  - address.address
-  - signature
-confirm: True
-
+#might need this too for the other issues
+#  - Edit: other_problem_1
+#    button: |
+#      **Other problem**:
+#      ${ other_problem_1 }
+#  - Edit: other_areas_started_other_1
+#    button: |
+#      **Other problem started**:
+#      ${ other_areas_started_other_1 }
+#  - Edit: other_areas_description_other_1
+#    button: |
+#      **Other problem description**:
+#      ${ other_areas_description_other_1 }
+#  - Edit: other_problem_2
+#    button: |
+#      **Other problem**:
+#      ${ other_problem_2 }
+#  - Edit: other_areas_started_other_2
+#    button: |
+#      **Other problem started**:
+#      ${ other_areas_started_other_2 }
+#  - Edit: other_areas_description_other_2
+#    button: |
+#      **Other problem description**:
+#      ${ other_areas_description_other_2 }
+#  - Edit: other_problem_3
+#    button: |
+#      **Other problem**:
+#      ${ other_problem_3 }
+#  - Edit: other_areas_started_other_3
+#    button: |
+#      **Other problem started**:
+#      ${ other_areas_started_other_3 }
+#  - Edit: other_areas_description_other_3
+#    button: |
+#      **Other problem description**:
+#      ${ other_areas_description_other_3 }
+#  - Edit: other_problem_4
+#    button: |
+#      **Other problem**:
+#      ${ other_problem_4 }
+#  - Edit: other_areas_started_other_4
+#    button: |
+#      **Other problem started**:
+#      ${ other_areas_started_other_4 }
+#  - Edit: other_areas_description_other_4
+#    button: |
+#      **Other problem description**:
+#      ${ other_areas_description_other_4 }
+#  - Edit: signature_date
+#    button: |
+#      **Date of signature**:
+#      ${ signature_date }
 ---
 id: download Request_for_repairs_letter
 event: Request_for_repairs_letter_download
@@ -2179,169 +1478,170 @@ attachment:
   filename: Request_for_repairs_letter
   variable name: Request_for_repairs_letter_attachment[i]
   skip undefined: True
-  pdf template file: Request_for_repairs_letter.pdf
+  pdf template file: Request_for_Repairs_letter.pdf
   fields:
-      - "plumbing_other": ${ plumbing_other }
-      - "windows_screens": ${ windows_screens }
-      - "windows_storm_windows": ${ windows_storm_windows }
-      - "other_parties1": ${ other_parties[0] }
-      - "windows_broken_glass": ${ windows_broken_glass }
-      - "windows_locks": ${ windows_locks }
+      - "infestations_mice": ${ repairs_checklist.infestations.mice.problem }
+      - "infestations_started_mice": ${ repairs_checklist.infestations.mice.started }
+      - "infestations_description_mice": ${ repairs_checklist.infestations.mice.description }
+      - "infestations_cockroaches": ${ repairs_checklist.infestations.cockroaches.problem }
+      - "infestations_started_cockroaches": ${ repairs_checklist.infestations.cockroaches.started }
+      - "infestations_description_cockroaches": ${ repairs_checklist.infestations.cockroaches.description }
+      - "infestations_bedbugs": ${ repairs_checklist.infestations.bedbugs.problem }
+      - "infestations_started_bedbugs": ${ repairs_checklist.infestations.bedbugs.started }
+      - "infestations_description_bedbugs": ${ repairs_checklist.infestations.bedbugs.description }
+      - "infestations_other": ${ repairs_checklist.infestations.other.problem }
+      - "infestations_started_other": ${ repairs_checklist.infestations.other.started }
+      - "infestations_description_other": ${ repairs_checklist.infestations.other.description }
+      - "electrical_smoke_detector": ${ repairs_checklist.electrical.smoke_detector.problem }
+      - "electrical_started_smoke_detector": ${ repairs_checklist.electrical.smoke_detector.started }
+      - "electrical_description_smoke_detector": ${ repairs_checklist.electrical.smoke_detector.description }
+      - "electrical_wiring": ${ repairs_checklist.electrical.wiring.problem }
+      - "electrical_started_wiring": ${ repairs_checklist.electrical.wiring.started }
+      - "electrical_description_wiring": ${ repairs_checklist.electrical.wiring.description }
+      - "electrical_circuits": ${ repairs_checklist.electrical.circuits.problem }
+      - "electrical_started_circuits": ${ repairs_checklist.electrical.circuits.started }
+      - "electrical_description_circuits": ${ repairs_checklist.electrical.circuits.description }
+      - "electrical_outlet_covers": ${ repairs_checklist.electrical.outlet_covers.problem }
+      - "electrical_started_outlet_covers": ${ repairs_checklist.electrical.outlet_covers.started }
+      - "electrical_description_outlet_covers": ${ repairs_checklist.electrical.outlet_covers.description }
+      - "electrical_other": ${ repairs_checklist.electrical.other.problem }
+      - "electrical_started_other": ${ repairs_checklist.electrical.other.started }
+      - "electrical_description_other": ${ repairs_checklist.electrical.other.description }
+      - "plumbing_hot_water": ${ repairs_checklist.plumbing.hot_water.problem }
+      - "plumbing_started_hot_water": ${ repairs_checklist.plumbing.hot_water.started }
+      - "plumbing_description_hot_water": ${ repairs_checklist.plumbing.hot_water.description }
+      - "plumbing_clogged_pipes": ${ repairs_checklist.plumbing.clogged_pipes.problem }
+      - "plumbing_started_clogged_pipes": ${ repairs_checklist.plumbing.clogged_pipes.started }
+      - "plumbing_description_clogged_pipes": ${ repairs_checklist.plumbing.clogged_pipes.description }
+      - "plumbing_water_pressure": ${ repairs_checklist.plumbing.water_pressure.problem }
+      - "plumbing_started_water_pressure": ${ repairs_checklist.plumbing.water_pressure.started }
+      - "plumbing_description_water_pressure": ${ repairs_checklist.plumbing.water_pressure.description }
+      - "plumbing_dripping_faucets": ${ repairs_checklist.plumbing.dripping_faucets.problem }
+      - "plumbing_started_dripping_faucets": ${ repairs_checklist.plumbing.dripping_faucets.started }
+      - "plumbing_description_dripping_faucets": ${ repairs_checklist.plumbing.dripping_faucets.description }
+      - "plumbing_leaks": ${ repairs_checklist.plumbing.leaks.problem }
+      - "plumbing_started_leaks": ${ repairs_checklist.plumbing.leaks.started }
+      - "plumbing_description_leaks": ${ repairs_checklist.plumbing.leaks.description }
+      - "plumbing_other": ${ repairs_checklist.plumbing.other.problem }
+      - "plumbing_started_other": ${ repairs_checklist.plumbing.other.started }
+      - "plumbing_description_other": ${ repairs_checklist.plumbing.other.description }
+      - "windows_screens": ${ repairs_checklist.windows.screens.problem }
+      - "windows_started_screens": ${ repairs_checklist.windows.screens.started }
+      - "windows_description_screens": ${ repairs_checklist.windows.screens.description }
+      - "windows_storm_windows": ${ repairs_checklist.windows.storm_windows.problem }
+      - "windows_started_storm_windows": ${ repairs_checklist.windows.storm_windows.started }
+      - "windows_description_storm_windows": ${ repairs_checklist.windows.storm_windows.description }
+      - "windows_broken_glass": ${ repairs_checklist.windows.broken_glass.problem }
+      - "windows_started_broken_glass": ${ repairs_checklist.windows.broken_glass.started }
+      - "windows_description_broken_glass": ${ repairs_checklist.windows.broken_glass.description }
+      - "windows_locks": ${ repairs_checklist.windows.locks.problem }
+      - "windows_started_locks": ${ repairs_checklist.windows.locks.started }
+      - "windows_description_locks": ${ repairs_checklist.windows.locks.description }
+      - "windows_other": ${ repairs_checklist.windows.other.problem }
+      - "windows_started_other": ${ repairs_checklist.windows.other.started }
+      - "windows_description_other": ${ repairs_checklist.windows.other.description }
+      - "doors_deadbolt_locks": ${ repairs_checklist.doors.deadbolt_locks.problem }
+      - "doors_started_deadbolt_locks": ${ repairs_checklist.doors.deadbolt_locks.started }
+      - "doors_description_deadbolt_locks": ${ repairs_checklist.doors.deadbolt_locks.description }
+      - "doors_broken_locks": ${ repairs_checklist.doors.broken_locks.problem }
+      - "doors_started_broken_locks": ${ repairs_checklist.doors.broken_locks.started }
+      - "doors_description_broken_locks": ${ repairs_checklist.doors.broken_locks.description }
+      - "doors_door_knobs": ${ repairs_checklist.doors.door_knobs.problem }
+      - "doors_started_door_knobs": ${ repairs_checklist.doors.door_knobs.started }
+      - "doors_description_door_knobs": ${ repairs_checklist.doors.door_knobs.description }
+      - "doors_other": ${ repairs_checklist.doors.other.problem }
+      - "doors_started_other": ${ repairs_checklist.doors.other.started }
+      - "doors_description_other": ${ repairs_checklist.doors.other.description }
+      - "walls_ceiling_floors_paint": ${ repairs_checklist.walls_ceiling_floors.paint.problem }
+      - "walls_ceiling_floors_started_paint": ${ repairs_checklist.walls_ceiling_floors.paint.started }
+      - "walls_ceiling_floors_description_paint": ${ repairs_checklist.walls_ceiling_floors.paint.description }
+      - "walls_ceiling_floors_holes": ${ repairs_checklist.walls_ceiling_floors.holes.problem }
+      - "walls_ceiling_floors_started_holes": ${ repairs_checklist.walls_ceiling_floors.holes.started }
+      - "walls_ceiling_floors_description_holes": ${ repairs_checklist.walls_ceiling_floors.holes.description }
+      - "walls_ceiling_floors_leaky_roof_ceiling": ${ repairs_checklist.walls_ceiling_floors.leaky_roof_ceiling.problem }
+      - "walls_ceiling_floors_started_leaky_roof_ceiling": ${ repairs_checklist.walls_ceiling_floors.leaky_roof_ceiling.started }
+      - "walls_ceiling_floors_description_leaky_roof_ceiling": ${ repairs_checklist.walls_ceiling_floors.leaky_roof_ceiling.description }
+      - "walls_ceiling_floors_carpet": ${ repairs_checklist.walls_ceiling_floors.carpet.problem }
+      - "walls_ceiling_floors_started_carpet": ${ repairs_checklist.walls_ceiling_floors.carpet.started }
+      - "walls_ceiling_floors_description_carpet": ${ repairs_checklist.walls_ceiling_floors.carpet.description }
+      - "walls_ceiling_floors_tiles_linoleum": ${ repairs_checklist.walls_ceiling_floors.tiles_linoleum.problem }
+      - "walls_ceiling_floors_started_tiles_linoleum": ${ repairs_checklist.walls_ceiling_floors.tiles_linoleum.started }
+      - "walls_ceiling_floors_description_tiles_linoleum": ${ repairs_checklist.walls_ceiling_floors.tiles_linoleum.description }
+      - "walls_ceiling_floors_other": ${ repairs_checklist.walls_ceiling_floors.other.problem }
+      - "walls_ceiling_floors_started_other": ${ repairs_checklist.walls_ceiling_floors.other.started }
+      - "walls_ceiling_floors_description_other": ${ repairs_checklist.walls_ceiling_floors.other.description }
+      - "furnace_heat": ${ repairs_checklist.furnace.heat.problem }
+      - "furnace_started_heat": ${ repairs_checklist.furnace.heat.started }
+      - "furnace_description_heat": ${ repairs_checklist.furnace.heat.description }
+      - "furnace_gas_leaks": ${ repairs_checklist.furnace.gas_leaks.problem }
+      - "furnace_started_gas_leaks": ${ repairs_checklist.furnace.gas_leaks.started }
+      - "furnace_description_gas_leaks": ${ repairs_checklist.furnace.gas_leaks.description }
+      - "furnace_other": ${ repairs_checklist.furnace.other.problem }
+      - "furnace_started_other": ${ repairs_checklist.furnace.other.started }
+      - "furnace_description_other": ${ repairs_checklist.furnace.other.description }
+      - "appliances_stove": ${ repairs_checklist.appliances.stove.problem }
+      - "appliances_started_stove": ${ repairs_checklist.appliances.stove.started }
+      - "appliances_description_stove": ${ repairs_checklist.appliances.stove.description }
+      - "appliances_refrigerator": ${ repairs_checklist.appliances.refrigerator.problem }
+      - "appliances_started_refrigerator": ${ repairs_checklist.appliances.refrigerator.started }
+      - "appliances_description_refrigerator": ${ repairs_checklist.appliances.refrigerator.description }
+      - "appliances_other": ${ repairs_checklist.appliances.other.problem }
+      - "appliances_started_other": ${ repairs_checklist.appliances.other.started }
+      - "appliances_description_other": ${ repairs_checklist.appliances.other.description }
+      - "security_illegal_entries": ${ repairs_checklist.security.illegal_entries.problem }
+      - "security_started_illegal_entries": ${ repairs_checklist.security.illegal_entries.started }
+      - "security_description_illegal_entries": ${ repairs_checklist.security.illegal_entries.description }
+      - "security_disturbance": ${ repairs_checklist.security.disturbance.problem }
+      - "security_started_disturbance": ${ repairs_checklist.security.disturbance.started }
+      - "security_description_disturbance": ${ repairs_checklist.security.disturbance.description } 
+      - "security_break_ins": ${ repairs_checklist.security.break_ins.problem }
+      - "security_started_break_ins": ${ repairs_checklist.security.break_ins.started }
+      - "security_description_break_ins": ${ repairs_checklist.security.break_ins.description }
+      - "security_unsecure_doors": ${ repairs_checklist.security.unsecure_doors.problem }
+      - "security_started_unsecure_doors": ${ repairs_checklist.security.unsecure_doors.started }
+      - "security_description_unsecure_doors": ${ repairs_checklist.security.unsecure_doors.description }
+      - "security_other": ${ repairs_checklist.security.other.problem }
+      - "security_started_other": ${ repairs_checklist.security.other.started }
+      - "security_description_other": ${ repairs_checklist.security.other.description }
+      - "other_areas_yard": ${ repairs_checklist.other_areas.yard.problem }
+      - "other_areas_started_yard": ${ repairs_checklist.other_areas.yard.started }
+      - "other_areas_description_yard": ${ repairs_checklist.other_areas.yard.description }
+      - "other_areas_trash": ${ repairs_checklist.other_areas.trash.problem }
+      - "other_areas_started_trash": ${ repairs_checklist.other_areas.trash.started }
+      - "other_areas_description_trash": ${ repairs_checklist.other_areas.trash.description }
+      - "other_areas_garage": ${ repairs_checklist.other_areas.garage.problem }
+      - "other_areas_started_garage": ${ repairs_checklist.other_areas.garage.started }
+      - "other_areas_description_garage": ${ repairs_checklist.other_areas.garage.description }
+      - "other_areas_basement": ${ repairs_checklist.other_areas.basement.problem }
+      - "other_areas_started_basement": ${ repairs_checklist.other_areas.basement.started }
+      - "other_areas_description_basement": ${ repairs_checklist.other_areas.basement.description }
+      - "other_areas_utility_bills": ${ repairs_checklist.other_areas.utility_bills.problem }
+      - "other_areas_started_utility_bills": ${ repairs_checklist.other_areas.utility_bills.started }
+      - "other_areas_description_utility_bills": ${ repairs_checklist.other_areas.utility_bills.description }
+      - "other_areas_cabinets": ${ repairs_checklist.other_areas.cabinets.problem }
+      - "other_areas_started_cabinets": ${ repairs_checklist.other_areas.cabinets.started }
+      - "other_areas_description_cabinets": ${ repairs_checklist.other_areas.cabinets.description }
+      - "other_areas1_other_1": ${ defined('repairs_checklist.other_areas.other[0]') } 
+      - "other_problem_1": ${ repairs_checklist.other_areas.other[0].problem }
+      - "other_areas_started_other_1": ${ repairs_checklist.other_areas.other[0].started }
+      - "other_areas_description_other_1": ${ repairs_checklist.other_areas.other[0].description }
+      - "other_areas1_other_2": ${ defined('repairs_checklist.other_areas.other[1]') }
+      - "other_problem_2": ${ repairs_checklist.other_areas.other[1].problem }
+      - "other_areas_started_other_2": ${ repairs_checklist.other_areas.other[1].started }
+      - "other_areas_description_other_2": ${ repairs_checklist.other_areas.other[1].description }
+      - "other_areas1_other_3": ${ defined("repairs_checklist.other_areas.other[2]") }
+      - "other_problem_3": ${ repairs_checklist.other_areas.other[2].problem }
+      - "other_areas_started_other_3": ${ repairs_checklist.other_areas.other[2].started }
+      - "other_areas_description_other_3": ${ repairs_checklist.other_areas.other[2].description }
+      - "other_areas1_other_4": ${ defined("repairs_checklist.other_areas.other[3]") }
+      - "other_problem_4": ${ repairs_checklist.other_areas.other[3].problem }
+      - "other_areas_started_other_4": ${ repairs_checklist.other_areas.other[3].started }
+      - "other_areas_description_other_4": ${ repairs_checklist.other_areas.other[3].description }
+      - "multi_other_parties_comma": ${ comma_and_list(other_parties[0], other_parties[1]) }
+      #- "other_parties1": ${ other_parties[0] } #add comma_and_list function here to list all OPs or look into generating separate docs w/each OP on it's own copy
       - "other_parties1_address_address": ${ other_parties[0].address.address }
-      - "windows_other": ${ windows_other }
       - "other_parties1_address_line_two": ${ other_parties[0].address.line_two() }
-      - "doors_deadbolt_locks": ${ doors_deadbolt_locks }
-      - "doors_broken_locks": ${ doors_broken_locks }
-      - "users1_name": ${ users[0] }
-      - "users1_name": ${ users[0] }
+      - "multi_user_comma": ${ comma_and_list(users[0], users[1]) }
       - "users1_address_on_one_line": ${ users[0].address.on_one_line() }
-      - "doors_door_knobs": ${ doors_door_knobs }
-      - "doors_other": ${ doors_other }
-      - "walls_ceiling_floors_paint": ${ walls_ceiling_floors_paint }
-      - "walls_ceiling_floors_holes": ${ walls_ceiling_floors_holes }
-      - "walls_ceiling_floors_leaky_roof_ceiling": ${ walls_ceiling_floors_leaky_roof_ceiling }
-      - "walls_ceiling_floors_carpet": ${ walls_ceiling_floors_carpet }
-      - "walls_ceiling_floors_tiles_linoleum": ${ walls_ceiling_floors_tiles_linoleum }
-      - "walls_ceiling_floors_other": ${ walls_ceiling_floors_other }
-      - "furnace_heat": ${ furnace_heat }
-      - "furnace_gas_leaks": ${ furnace_gas_leaks }
-      - "furnace_other": ${ furnace_other }
-      - "appliances_stove": ${ appliances_stove }
-      - "appliances_refrigerator": ${ appliances_refrigerator }
-      - "appliances_other": ${ appliances_other }
-      - "security_illegal_entries": ${ security_illegal_entries }
-      - "security_disturbance": ${ security_disturbance }
-      - "security_break_ins": ${ security_break_ins }
-      - "infestations_mice": ${ infestations_mice }
-      - "infestations_started_mice": ${ infestations_started_mice }
-      - "infestations_description_mice": ${ infestations_description_mice }
-      - "infestations_cockroaches": ${ infestations_cockroaches }
-      - "infestations_started_cockroaches": ${ infestations_started_cockroaches }
-      - "infestations_description_cockroaches": ${ infestations_description_cockroaches }
-      - "security_unsecure_doors": ${ security_unsecure_doors }
-      - "infestations_bedbugs": ${ infestations_bedbugs }
-      - "infestations_started_bedbugs": ${ infestations_started_bedbugs }
-      - "infestations_description_bedbugs": ${ infestations_description_bedbugs }
-      - "security_other": ${ security_other }
-      - "infestations_other": ${ infestations_other }
-      - "infestations_started_other": ${ infestations_started_other }
-      - "infestations_description_other": ${ infestations_description_other }
-      - "other_areas_yard": ${ other_areas_yard }
-      - "electrical_smoke_detector": ${ electrical_smoke_detector }
-      - "electrical_started_smoke_detector": ${ electrical_started_smoke_detector }
-      - "electrical_description_smoke_detector": ${ electrical_description_smoke_detector }
-      - "other_areas_trash": ${ other_areas_trash }
-      - "electrical_wiring": ${ electrical_wiring }
-      - "electrical_started_wiring": ${ electrical_started_wiring }
-      - "electrical_description_wiring": ${ electrical_description_wiring }
-      - "other_areas_garage": ${ other_areas_garage }
-      - "electrical_circuits": ${ electrical_circuits }
-      - "electrical_started_circuits": ${ electrical_started_circuits }
-      - "electrical_description_circuits": ${ electrical_description_circuits }
-      - "electrical_outlet_covers": ${ electrical_outlet_covers }
-      - "other_areas_basement": ${ other_areas_basement }
-      - "electrical_started_outlet_covers": ${ electrical_started_outlet_covers }
-      - "electrical_description_outlet_covers": ${ electrical_description_outlet_covers }
-      - "electrical_other": ${ electrical_other }
-      - "other_areas_utility_bills": ${ other_areas_utility_bills }
-      - "electrical_started_other": ${ electrical_started_other }
-      - "electrical_description_other": ${ electrical_description_other }
-      - "other_areas_cabinets": ${ other_areas_cabinets }
-      - "plumbing_hot_water": ${ plumbing_hot_water }
-      - "plumbing_started_hot_water": ${ plumbing_started_hot_water }
-      - "plumbing_description_hot_water": ${ plumbing_description_hot_water }
-      - "plumbing_clogged_pipes": ${ plumbing_clogged_pipes }
-      - "plumbing_started_clogged_pipes": ${ plumbing_started_clogged_pipes }
-      - "plumbing_description_clogged_pipes": ${ plumbing_description_clogged_pipes }
-      - "plumbing_water_pressure": ${ plumbing_water_pressure }
-      - "plumbing_started_water_pressure": ${ plumbing_started_water_pressure }
-      - "plumbing_description_water_pressure": ${ plumbing_description_water_pressure }
-      - "plumbing_dripping_faucets": ${ plumbing_dripping_faucets }
-      - "plumbing_started_dripping_faucets": ${ plumbing_started_dripping_faucets }
-      - "plumbing_description_dripping_faucets": ${ plumbing_description_dripping_faucets }
-      - "plumbing_leaks": ${ plumbing_leaks }
-      - "plumbing_started_leaks": ${ plumbing_started_leaks }
-      - "plumbing_description_leaks": ${ plumbing_description_leaks }
-      - "plumbing_started_other": ${ plumbing_started_other }
-      - "plumbing_description_other": ${ plumbing_description_other }
-      - "windows_started_screens": ${ windows_started_screens }
-      - "windows_description_screens": ${ windows_description_screens }
-      - "windows_started_storm_windows": ${ windows_started_storm_windows }
-      - "windows_description_storm_windows": ${ windows_description_storm_windows }
-      - "windows_started_broken_glass": ${ windows_started_broken_glass }
-      - "windows_description_broken_glass": ${ windows_description_broken_glass }
-      - "windows_started_locks": ${ windows_started_locks }
-      - "windows_description_locks": ${ windows_description_locks }
-      - "windows_started_other": ${ windows_started_other }
-      - "windows_description_other": ${ windows_description_other }
-      - "doors_started_deadbolt_locks": ${ doors_started_deadbolt_locks }
-      - "doors_description_deadbolt_locks": ${ doors_description_deadbolt_locks }
-      - "doors_started_broken_locks": ${ doors_started_broken_locks }
-      - "doors_description_broken_locks": ${ doors_description_broken_locks }
-      - "doors_started_door_knobs": ${ doors_started_door_knobs }
-      - "doors_description_door_knobs": ${ doors_description_door_knobs }
-      - "doors_started_other": ${ doors_started_other }
-      - "doors_description_other": ${ doors_description_other }
-      - "walls_ceiling_floors_started_paint": ${ walls_ceiling_floors_started_paint }
-      - "walls_ceiling_floors_description_paint": ${ walls_ceiling_floors_description_paint }
-      - "walls_ceiling_floors_started_holes": ${ walls_ceiling_floors_started_holes }
-      - "walls_ceiling_floors_description_holes": ${ walls_ceiling_floors_description_holes }
-      - "walls_ceiling_floors_started_leaky_roof_ceiling": ${ walls_ceiling_floors_started_leaky_roof_ceiling }
-      - "walls_ceiling_floors_description_leaky_roof_ceiling": ${ walls_ceiling_floors_description_leaky_roof_ceiling }
-      - "walls_ceiling_floors_started_carpet": ${ walls_ceiling_floors_started_carpet }
-      - "walls_ceiling_floors_description_carpet": ${ walls_ceiling_floors_description_carpet }
-      - "walls_ceiling_floors_started_tiles_linoleum": ${ walls_ceiling_floors_started_tiles_linoleum }
-      - "walls_ceiling_floors_description_tiles_linoleum": ${ walls_ceiling_floors_description_tiles_linoleum }
-      - "walls_ceiling_floors_started_other": ${ walls_ceiling_floors_started_other }
-      - "walls_ceiling_floors_description_other": ${ walls_ceiling_floors_description_other }
-      - "furnace_started_heat": ${ furnace_started_heat }
-      - "furnace_description_heat": ${ furnace_description_heat }
-      - "furnace_started_gas_leaks": ${ furnace_started_gas_leaks }
-      - "furnace_description_gas_leaks": ${ furnace_description_gas_leaks }
-      - "furnace_started_other": ${ furnace_started_other }
-      - "furnace_description_other": ${ furnace_description_other }
-      - "appliances_started_stove": ${ appliances_started_stove }
-      - "appliances_description_stove": ${ appliances_description_stove }
-      - "appliances_started_refrigerator": ${ appliances_started_refrigerator }
-      - "appliances_description_refrigerator": ${ appliances_description_refrigerator }
-      - "appliances_started_other": ${ appliances_started_other }
-      - "appliances_description_other": ${ appliances_description_other }
-      - "security_started_illegal_entries": ${ security_started_illegal_entries }
-      - "security_description_illegal_entries": ${ security_description_illegal_entries }
-      - "security_started_disturbance": ${ security_started_disturbance }
-      - "security_description_disturbance": ${ security_description_disturbance }
-      - "security_started_break_ins": ${ security_started_break_ins }
-      - "security_description_break_ins": ${ security_description_break_ins }
-      - "security_started_unsecure_doors": ${ security_started_unsecure_doors }
-      - "security_description_unsecure_doors": ${ security_description_unsecure_doors }
-      - "security_started_other": ${ security_started_other }
-      - "security_description_other": ${ security_description_other }
-      - "other_areas_started_yard": ${ other_areas_started_yard }
-      - "other_areas_description_yard": ${ other_areas_description_yard }
-      - "other_areas_started_trash": ${ other_areas_started_trash }
-      - "other_areas_description_trash": ${ other_areas_description_trash }
-      - "other_areas_started_garage": ${ other_areas_started_garage }
-      - "other_areas_description_garage": ${ other_areas_description_garage }
-      - "other_areas_started_basement": ${ other_areas_started_basement }
-      - "other_areas_description_basement": ${ other_areas_description_basement }
-      - "other_areas_started_utility_bills": ${ other_areas_started_utility_bills }
-      - "other_areas_description_utility_bills": ${ other_areas_description_utility_bills }
-      - "other_areas_started_cabinets": ${ other_areas_started_cabinets }
-      - "other_areas_description_cabinets": ${ other_areas_description_cabinets }
-      - "other_problem_1": ${ other_problem_1 }
-      - "other_areas_started_other_1": ${ other_areas_started_other_1 }
-      - "other_areas_description_other_1": ${ other_areas_description_other_1 }
-      - "other_problem_2": ${ other_problem_2 }
-      - "other_areas_started_other_2": ${ other_areas_started_other_2 }
-      - "other_areas_description_other_2": ${ other_areas_description_other_2 }
-      - "other_problem_3": ${ other_problem_3 }
-      - "other_areas_started_other_3": ${ other_areas_started_other_3 }
-      - "other_areas_description_other_3": ${ other_areas_description_other_3 }
-      - "other_problem_4": ${ other_problem_4 }
-      - "other_areas_started_other_4": ${ other_areas_started_other_4 }
-      - "other_areas_description_other_4": ${ other_areas_description_other_4 }
-      - "users1_signature": ${ users[0].signature }
+      - "users1_signature": ${ comma_and_list(users[0].signature, users[1].signature) } #does this logic work here to collect both signatures?? 
       - "signature_date": ${ signature_date.format() }
-
-
-
